@@ -1,0 +1,72 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useCreateWorkout } from '@/hooks/useWorkouts';
+
+export default function WorkoutForm() {
+  const [type, setType] = useState('');
+  const [duration, setDuration] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const createWorkout = useCreateWorkout();
+
+  function handleCreateWorkout() {
+    createWorkout.mutate(
+      { type, duration_minutes: parseInt(duration), notes },
+      {
+        onSuccess: () => {
+          setType('');
+          setDuration('');
+          setNotes('');
+        },
+      },
+    );
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    handleCreateWorkout();
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Input
+          type="text"
+          placeholder="Workout type (Gym, Run, Yoga...)"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <Input
+          type="number"
+          placeholder="Duration (minutes)"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <Textarea
+          placeholder="Notes (optional)"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </div>
+
+      <Button
+        type="submit"
+        variant="default"
+        disabled={createWorkout.isPending}
+        className="w-full bg-neon-green-300 hover:bg-neon-green-400 text-black"
+      >
+        {createWorkout.isPending ? 'Logging workout...' : 'Log workout'}
+      </Button>
+    </form>
+  );
+}
