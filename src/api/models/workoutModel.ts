@@ -18,4 +18,8 @@ export class WorkoutModel {
 
     return result.rows[0];
   }
+
+  static async delete(id: string): Promise<void> {
+    await pool.query('DELETE FROM workouts WHERE id = $1', [id]);
+  }
 }

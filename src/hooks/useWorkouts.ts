@@ -18,3 +18,14 @@ export function useCreateWorkout() {
     },
   });
 }
+
+export function useDeleteWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: workoutClient.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workouts'] });
+    },
+  });
+}
