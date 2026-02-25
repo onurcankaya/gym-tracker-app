@@ -1,5 +1,5 @@
 export type Workout = {
-  id: number;
+  id: string;
   type: string;
   duration_minutes: number;
   notes: string | null;

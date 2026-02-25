@@ -13,4 +13,11 @@ export class WorkoutService {
 
     return WorkoutModel.create(data);
   }
+
+  static async deleteWorkout(id: string): Promise<void> {
+    if (!id) {
+      throw new Error('Invalid workout id');
+    }
+    return WorkoutModel.delete(id);
+  }
 }
