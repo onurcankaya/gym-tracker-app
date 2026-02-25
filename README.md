@@ -1,4 +1,8 @@
-## Gym Bro App
+## Gym Tracker App
+
+```bash
+npm install
+```
 
 ```bash
 npm run dev
