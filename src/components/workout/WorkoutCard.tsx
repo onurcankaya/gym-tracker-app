@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Trash2 as TrashIcon } from 'lucide-react';
+import EditWorkoutDialog from '@/components/workout/EditWorkoutDialog';
 import { useDeleteWorkout } from '@/hooks/useWorkouts';
 import type { Workout } from '@/api/types/workout';
 
@@ -43,31 +44,35 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
             )}
           </span>
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="ml-1">
-              <TrashIcon />
-            </Button>
-          </AlertDialogTrigger>
+        <div>
+          <EditWorkoutDialog workout={workout} />
 
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete workout?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                variant="destructive"
-                onClick={() => handleDeleteWorkout(workout.id)}
-              >
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="ml-1">
+                <TrashIcon />
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete workout?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  variant="destructive"
+                  onClick={() => handleDeleteWorkout(workout.id)}
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
     </div>
   );

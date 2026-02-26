@@ -30,7 +30,7 @@ export default function Home() {
           <CardTitle>Recent Workouts</CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-4">
           {workouts?.map((workout) => (
             <WorkoutCard key={workout.id} workout={workout} />
           ))}

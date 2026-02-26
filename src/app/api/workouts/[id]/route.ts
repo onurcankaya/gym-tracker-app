@@ -21,3 +21,24 @@ export async function DELETE(
     );
   }
 }
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  try {
+    const params = await context.params;
+    const body = await request.json();
+    const workout = await WorkoutService.updateWorkout(params.id, body);
+
+    return NextResponse.json(workout, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : 'Failed to update workout',
+      },
+      { status: 400 },
+    );
+  }
+}
