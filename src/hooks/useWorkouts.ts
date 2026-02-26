@@ -29,3 +29,14 @@ export function useDeleteWorkout() {
     },
   });
 }
+
+export function useUpdateWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: workoutClient.update,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workouts'] });
+    },
+  });
+}

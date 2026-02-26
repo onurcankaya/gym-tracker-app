@@ -1,4 +1,8 @@
-import { CreateWorkoutDTO, Workout } from '@/api/types/workout';
+import {
+  CreateWorkoutDTO,
+  UpdateWorkoutDTO,
+  Workout,
+} from '@/api/types/workout';
 
 const BASE_URL = '/api';
 const WORKOUTS_URL = `${BASE_URL}/workouts`;
@@ -30,6 +34,24 @@ export const workoutClient = {
     });
 
     if (!response.ok) throw new Error('Failed to delete workout');
+
+    return response.json();
+  },
+
+  update: async ({
+    id,
+    data,
+  }: {
+    id: string;
+    data: UpdateWorkoutDTO;
+  }): Promise<Workout> => {
+    const response = await fetch(`${WORKOUTS_URL}/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('Failed to update workout');
 
     return response.json();
   },

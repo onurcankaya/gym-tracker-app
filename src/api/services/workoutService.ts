@@ -1,5 +1,9 @@
 import { WorkoutModel } from '@/api/models/workoutModel';
-import { Workout, CreateWorkoutDTO } from '@/api/types/workout';
+import {
+  Workout,
+  CreateWorkoutDTO,
+  UpdateWorkoutDTO,
+} from '@/api/types/workout';
 
 export class WorkoutService {
   static async getAllWorkouts(): Promise<Workout[]> {
@@ -19,5 +23,20 @@ export class WorkoutService {
       throw new Error('Invalid workout id');
     }
     return WorkoutModel.delete(id);
+  }
+
+  static async updateWorkout(
+    id: string,
+    data: UpdateWorkoutDTO,
+  ): Promise<Workout> {
+    if (!id) {
+      throw new Error('Invalid workout id');
+    }
+
+    if (data.duration_minutes !== undefined && data.duration_minutes <= 0) {
+      throw new Error('Duration must be positive');
+    }
+
+    return WorkoutModel.update(id, data);
   }
 }

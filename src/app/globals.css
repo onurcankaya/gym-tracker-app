@@ -47,17 +47,17 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* custom colors */
-  --color-neon-green-100: #7fff00;
-  --color-neon-green-200: #39ff14;
-  --color-neon-green-300: #1aeb00;
-  --color-neon-green-400: #00e600;
+  --color-neon-green-100: #7fff00 !important;
+  --color-neon-green-200: #39ff14 !important;
+  --color-neon-green-300: #1aeb00 !important;
+  --color-neon-green-400: #00e600 !important;
 
-  --color-pastel-green-100: #96f2d6;
-  --color-pastel-green-200: #6bedc6;
-  --color-pastel-green-300: #2be5ad;
-  --color-pastel-green-400: #00e599;
-  --color-pastel-green-500: #00db9a;
-  --color-pastel-green-600: #00b27d;
+  --color-pastel-green-100: #96f2d6 !important;
+  --color-pastel-green-200: #6bedc6 !important;
+  --color-pastel-green-300: #2be5ad !important;
+  --color-pastel-green-400: #00e599 !important;
+  --color-pastel-green-500: #00db9a !important;
+  --color-pastel-green-600: #00b27d !important;
 }
 
 :root {

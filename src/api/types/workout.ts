@@ -11,3 +11,10 @@ export type CreateWorkoutDTO = {
   duration_minutes: number;
   notes?: string;
 };
+
+export type UpdateWorkoutDTO = {
+  type?: string;
+  duration_minutes?: number;
+  notes?: string;
+  created_at?: Date;
+};
