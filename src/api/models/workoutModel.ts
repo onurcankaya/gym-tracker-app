@@ -17,8 +17,8 @@ export class WorkoutModel {
 
   static async create(data: CreateWorkoutDTO): Promise<Workout> {
     const result = await pool.query(
-      'INSERT INTO workouts (type, duration_minutes, notes) VALUES ($1, $2, $3) RETURNING *',
-      [data.type, data.duration_minutes, data.notes || null],
+      'INSERT INTO workouts (type, duration_minutes, notes, created_at) VALUES ($1, $2, $3, $4) RETURNING *',
+      [data.type, data.duration_minutes, data.notes || null, data.created_at],
     );
 
     return result.rows[0];

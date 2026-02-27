@@ -4,23 +4,31 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import DatePicker from '@/components/common/DatePicker';
 import { useCreateWorkout } from '@/hooks/useWorkouts';
 
 export default function WorkoutForm() {
   const [type, setType] = useState('');
   const [duration, setDuration] = useState('');
   const [notes, setNotes] = useState('');
+  const [createdAt, setCreatedAt] = useState(new Date());
 
   const createWorkout = useCreateWorkout();
 
   function handleCreateWorkout() {
     createWorkout.mutate(
-      { type, duration_minutes: parseInt(duration), notes },
+      {
+        type,
+        duration_minutes: parseInt(duration),
+        notes,
+        created_at: createdAt,
+      },
       {
         onSuccess: () => {
           setType('');
           setDuration('');
           setNotes('');
+          setCreatedAt(new Date());
         },
       },
     );
@@ -41,6 +49,9 @@ export default function WorkoutForm() {
           onChange={(e) => setType(e.target.value)}
           required
         />
+      </div>
+      <div>
+        <DatePicker date={createdAt} setDate={setCreatedAt} />
       </div>
       <div>
         <Input
