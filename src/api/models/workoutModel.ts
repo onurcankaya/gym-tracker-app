@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import pool from '@/lib/db';
 import {
   Workout,
@@ -75,8 +76,6 @@ export class WorkoutModel {
 
   private static formatDate(date?: Date): string | null {
     if (!date) return null;
-
-    const d = new Date(date);
-    return d.toISOString().split('T')[0];
+    return format(date, 'yyyy-MM-dd');
   }
 }
