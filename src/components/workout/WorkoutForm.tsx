@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InputWithSuffix } from '@/components/ui/input-with-suffix';
 import { Textarea } from '@/components/ui/textarea';
 import DatePicker from '@/components/common/DatePicker';
 import { useCreateWorkout } from '@/hooks/useWorkouts';
@@ -54,11 +55,13 @@ export default function WorkoutForm() {
         <DatePicker date={createdAt} setDate={setCreatedAt} />
       </div>
       <div>
-        <Input
+        <InputWithSuffix
           type="number"
-          placeholder="Duration (minutes)"
+          placeholder="Duration"
           value={duration}
+          suffix="min"
           onChange={(e) => setDuration(e.target.value)}
+          min={0}
           required
         />
       </div>
