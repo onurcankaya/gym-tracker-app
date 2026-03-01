@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InputWithSuffix } from '@/components/ui/input-with-suffix';
 import { Textarea } from '@/components/ui/textarea';
 import DatePicker from '@/components/common/DatePicker';
 import { Pencil as PencilIcon } from 'lucide-react';
@@ -81,11 +82,13 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
             />
           </div>
           <div>
-            <Input
+            <InputWithSuffix
               type="number"
-              placeholder="Duration (minutes)"
+              placeholder="Duration"
               value={duration}
+              suffix="min"
               onChange={(e) => setDuration(parseInt(e.target.value))}
+              min={0}
               required
             />
           </div>

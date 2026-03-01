@@ -30,13 +30,13 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
 
   return (
     <div className="border rounded-md p-4">
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start gap-4">
         <div>
           <p className="text-xs text-gray-500 mb-2">
             {new Date(workout.created_at).toLocaleDateString('en-DK')}
           </p>
-          <span>{workout.type}</span>
-          <span>{` - ${workout.duration_minutes} min`}</span>
+          <span>{`${workout.type} • `}</span>
+          <span className="text-xs">{`${workout.duration_minutes} min`}</span>
 
           <span>
             {workout.notes && (
