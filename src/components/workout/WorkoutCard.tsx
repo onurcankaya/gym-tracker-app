@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { capitalize } from 'lodash';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,35 +12,71 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Trash2 as TrashIcon } from 'lucide-react';
 import EditWorkoutDialog from '@/components/workout/EditWorkoutDialog';
-import { useDeleteWorkout } from '@/hooks/useWorkouts';
-import type { Workout } from '@/api/types/workout';
+import { useDeleteRun } from '@/hooks/useRuns';
+import { useDeleteWeightTraining } from '@/hooks/useWeightTraining';
+import { WorkoutType, Workout } from '@/api/types';
 
 type WorkoutCardProps = {
   workout: Workout;
 };
 
 export default function WorkoutCard({ workout }: WorkoutCardProps) {
-  const deleteWorkout = useDeleteWorkout();
+  const deleteRun = useDeleteRun();
+  const deleteWeightTraining = useDeleteWeightTraining();
 
-  function handleDeleteWorkout(id: string) {
-    deleteWorkout.mutate(id);
+  function handleDeleteWorkout(type: WorkoutType, id: string) {
+    if (type === WorkoutType.RUN) {
+      deleteRun.mutate(id);
+    } else if (type === WorkoutType.WEIGHT_TRAINING) {
+      deleteWeightTraining.mutate(id);
+    }
   }
 
   return (
-    <div className="border rounded-md p-4">
+    <div className="border rounded-md p-4 hover:border-neon-green-300 transition-colors">
       <div className="flex justify-between items-start gap-4">
         <div>
-          <p className="text-xs text-gray-500 mb-2">
+          <p className="text-xs text-gray-400 mb-3">
             {new Date(workout.created_at).toLocaleDateString('en-DK')}
           </p>
-          <span>{`${workout.type} • `}</span>
-          <span className="text-xs">{`${workout.duration_minutes} min`}</span>
+
+          <Badge
+            variant="outline"
+            className="w-fit block border border-neon-green-300 mb-3"
+          >
+            <p className="text-sm text-center">{capitalize(workout.type)}</p>
+          </Badge>
+
+          <div className="flex items-center gap-2">
+            {workout.type === WorkoutType.RUN && (
+              <span className="text-sm">
+                {workout.distance}
+                {workout.distance_unit}
+              </span>
+            )}
+
+            {workout.type === WorkoutType.WEIGHT_TRAINING && (
+              <div className="flex items-center gap-1">
+                {workout.muscle_groups.map((muscleGroup, index) => (
+                  <Badge key={index} variant="outline">
+                    {capitalize(muscleGroup)}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            <span className="text-sm">•</span>
+
+            <span className="text-sm">{`${workout.duration_minutes} min`}</span>
+          </div>
 
           <span>
             {workout.notes && (
-              <p className="text-sm text-gray-500 mt-2">{workout.notes}</p>
+              <p className="text-xs text-gray-500 mt-2">{workout.notes}</p>
             )}
           </span>
         </div>
@@ -56,7 +92,7 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
 
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete workout?</AlertDialogTitle>
+                <AlertDialogTitle>Delete {workout.type}?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone.
                 </AlertDialogDescription>
@@ -65,7 +101,7 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   variant="destructive"
-                  onClick={() => handleDeleteWorkout(workout.id)}
+                  onClick={() => handleDeleteWorkout(workout.type, workout.id)}
                 >
                   Delete
                 </AlertDialogAction>

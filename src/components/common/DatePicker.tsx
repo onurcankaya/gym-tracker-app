@@ -16,7 +16,7 @@ type DatePickerProps = {
   setDate: Dispatch<SetStateAction<Date>>;
 };
 
-export default function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ date, setDate }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>

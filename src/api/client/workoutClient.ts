@@ -1,7 +1,7 @@
 import {
+  Workout,
   CreateWorkoutDTO,
   UpdateWorkoutDTO,
-  Workout,
 } from '@/api/types/workout';
 
 const BASE_URL = '/api';
@@ -34,8 +34,6 @@ export const workoutClient = {
     });
 
     if (!response.ok) throw new Error('Failed to delete workout');
-
-    return response.json();
   },
 
   update: async ({

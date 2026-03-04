@@ -170,4 +170,49 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  [data-slot='card'] {
+    gap: 1rem !important;
+  }
+
+  [data-slot='tabs-list'] {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--muted);
+    padding: 0.25rem;
+  }
+
+  [data-slot='tabs-trigger'][data-state='active'] {
+    background-color: var(--color-neon-green-300) !important;
+    color: black !important;
+  }
+
+  [data-slot='toggle-group-item'] {
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  [data-slot='toggle-group-item']:first-child {
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+
+  [data-slot='toggle-group-item']:last-child {
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+  }
+
+  [data-slot='toggle-group-item'][data-variant='outline'] {
+    border-left-width: 0;
+  }
+
+  [data-slot='toggle-group-item'][data-variant='outline']:first-child {
+    border-left-width: 1px;
+  }
+
+  [data-slot='toggle-group-item'][data-state='on'] {
+    background-color: var(--color-neon-green-300) !important;
+    color: black !important;
+  }
 }
