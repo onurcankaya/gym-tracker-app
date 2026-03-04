@@ -17,7 +17,7 @@ export class WeightTrainingModel {
 
   static async create(data: CreateWeightTrainingDTO): Promise<WeightTraining> {
     const result = await pool.query(
-      'INSERT INTO weight_trainings (muscle_group, duration_minutes, notes, created_at) VALUES ($1, $2, $3, $4) RETURNING *',
+      'INSERT INTO weight_trainings (muscle_groups, duration_minutes, notes, created_at) VALUES ($1, $2, $3, $4) RETURNING *',
       [
         data.muscle_groups,
         data.duration_minutes,

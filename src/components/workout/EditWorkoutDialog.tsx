@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Pencil as PencilIcon } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -10,13 +11,16 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { InputWithToggle } from '@/components/ui/input-with-toggle';
 import { InputWithSuffix } from '@/components/ui/input-with-suffix';
 import { Textarea } from '@/components/ui/textarea';
-import DatePicker from '@/components/common/DatePicker';
-import { Pencil as PencilIcon } from 'lucide-react';
-import { useUpdateWorkout } from '@/hooks/useWorkouts';
-import { Workout } from '@/api/types/workout';
+import { Select } from '@/components/ui/select';
+import { DatePicker } from '@/components/common/DatePicker';
+import { useUpdateRun } from '@/hooks/useRuns';
+import { useUpdateWeightTraining } from '@/hooks/useWeightTraining';
+import { WorkoutType, Workout } from '@/api/types';
+import { DistanceUnit } from '@/api/types/run';
+import { MuscleGroup } from '@/api/types/weightTraining';
 
 type EditWorkoutDialogProps = {
   workout: Workout;
@@ -24,39 +28,83 @@ type EditWorkoutDialogProps = {
 
 export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
   const [open, setOpen] = useState(false);
-  const [type, setType] = useState(workout.type);
+  const [distance, setDistance] = useState(
+    workout.type === WorkoutType.RUN ? workout.distance : '',
+  );
+  const [distanceUnit, setDistanceUnit] = useState<DistanceUnit>(
+    workout.type === WorkoutType.RUN ? workout.distance_unit : DistanceUnit.KM,
+  );
+  const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>(
+    workout.type === WorkoutType.WEIGHT_TRAINING ? workout.muscle_groups : [],
+  );
   const [duration, setDuration] = useState(workout.duration_minutes);
   const [notes, setNotes] = useState(workout.notes || '');
   const [createdAt, setCreatedAt] = useState(workout.created_at);
 
-  const updateWorkout = useUpdateWorkout();
+  const updateRun = useUpdateRun();
+  const updateWeightTraining = useUpdateWeightTraining();
 
   function handleUpdateWorkout() {
-    updateWorkout.mutate(
-      {
-        id: workout.id,
-        data: {
-          type,
-          duration_minutes: duration,
-          notes,
-          created_at: createdAt,
+    if (workout.type === WorkoutType.RUN) {
+      updateRun.mutate(
+        {
+          id: workout.id,
+          data: {
+            distance:
+              typeof distance === 'string' ? parseInt(distance) : distance,
+            distance_unit: distanceUnit,
+            duration_minutes: duration,
+            notes,
+            created_at: createdAt,
+          },
         },
-      },
-      {
-        onSuccess: () => {
-          setOpen(false);
+        {
+          onSuccess: () => {
+            setOpen(false);
+          },
         },
-      },
-    );
+      );
+    } else if (workout.type === WorkoutType.WEIGHT_TRAINING) {
+      updateWeightTraining.mutate(
+        {
+          id: workout.id,
+          data: {
+            muscle_groups: muscleGroups,
+            duration_minutes: duration,
+            notes,
+            created_at: createdAt,
+          },
+        },
+        {
+          onSuccess: () => {
+            setOpen(false);
+          },
+        },
+      );
+    }
   }
 
+  const distanceUnitOptions = Object.values(DistanceUnit).map((unit) => ({
+    label: unit,
+    value: unit,
+  }));
+
+  const muscleGroupOptions = Object.values(MuscleGroup).map((group) => ({
+    label: group.charAt(0).toUpperCase() + group.slice(1),
+    value: group,
+  }));
+
   const isSaveButtonDisabled = useMemo(() => {
-    return updateWorkout.isPending || type.length === 0 || duration <= 0;
-  }, [type, duration, updateWorkout.isPending]);
+    return (
+      updateRun.isPending || updateWeightTraining.isPending || duration <= 0
+    );
+  }, [updateRun.isPending, updateWeightTraining.isPending, duration]);
 
   const saveButtonLabel = useMemo(() => {
-    return updateWorkout.isPending ? 'Saving changes...' : 'Save changes';
-  }, [updateWorkout.isPending]);
+    return updateRun.isPending || updateWeightTraining.isPending
+      ? 'Saving changes...'
+      : 'Save changes';
+  }, [updateRun.isPending, updateWeightTraining.isPending]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -68,40 +116,51 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit workout</DialogTitle>
+          <DialogTitle>Edit {workout.type}</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 my-6">
-          <div>
-            <Input
-              type="text"
-              placeholder="Workout type (Gym, Run, Yoga...)"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <InputWithSuffix
+        <div className="space-y-4 my-4">
+          {workout.type === WorkoutType.RUN && (
+            <InputWithToggle
               type="number"
-              placeholder="Duration"
-              value={duration}
-              suffix="min"
-              onChange={(e) => setDuration(parseInt(e.target.value))}
-              min={0}
-              required
+              placeholder="Distance"
+              value={distance}
+              onChange={setDistance}
+              toggleValue={distanceUnit}
+              onToggleChange={(value) => setDistanceUnit(value as DistanceUnit)}
+              toggleOptions={distanceUnitOptions}
             />
-          </div>
-          <div>
-            <Textarea
-              placeholder="Notes (optional)"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+          )}
+
+          {workout.type === WorkoutType.WEIGHT_TRAINING && (
+            <Select
+              multiSelect
+              placeholder="Select muscle groups"
+              options={muscleGroupOptions}
+              selected={muscleGroups}
+              onChange={(selected) =>
+                setMuscleGroups(selected as MuscleGroup[])
+              }
             />
-          </div>
-          <div>
-            <DatePicker date={createdAt} setDate={setCreatedAt} />
-          </div>
+          )}
+
+          <InputWithSuffix
+            type="number"
+            placeholder="Duration"
+            value={duration}
+            suffix="min"
+            onChange={(e) => setDuration(parseInt(e.target.value))}
+            min={0}
+            required
+          />
+
+          <Textarea
+            placeholder="Notes (optional)"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+
+          <DatePicker date={createdAt} setDate={setCreatedAt} />
         </div>
 
         <DialogFooter>
@@ -110,10 +169,9 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
           </Button>
           <Button
             type="submit"
-            variant="default"
+            variant="primary"
             disabled={isSaveButtonDisabled}
             onClick={handleUpdateWorkout}
-            className="bg-neon-green-300 hover:bg-neon-green-400 text-black"
           >
             {saveButtonLabel}
           </Button>
