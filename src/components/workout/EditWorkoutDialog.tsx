@@ -109,7 +109,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="ml-1">
+        <Button variant="ghost" size="icon" className="size-8">
           <PencilIcon />
         </Button>
       </DialogTrigger>

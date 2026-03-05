@@ -69,7 +69,7 @@ export function Select(props: SelectProps) {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={cn('w-full justify-between', className)}
+          className={cn('w-full justify-between h-auto', className)}
         >
           <div className="flex gap-1 flex-wrap flex-1 overflow-hidden">
             {selectedItems.length > 0 ? (
@@ -80,7 +80,7 @@ export function Select(props: SelectProps) {
                     <Badge
                       key={value}
                       variant="outline"
-                      className="cursor-pointer"
+                      className="shrink-0 cursor-pointer"
                     >
                       {option?.label}
                       <span
