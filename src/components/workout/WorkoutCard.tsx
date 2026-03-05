@@ -38,7 +38,7 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
 
   return (
     <div className="border rounded-md p-4 hover:border-neon-green-300 transition-colors">
-      <div className="flex justify-between items-start gap-4">
+      <div className="flex justify-between items-start gap-2">
         <div>
           <p className="text-xs text-gray-400 mb-3">
             {new Date(workout.created_at).toLocaleDateString('en-DK')}
@@ -51,28 +51,30 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
             <p className="text-sm text-center">{capitalize(workout.type)}</p>
           </Badge>
 
-          <div className="flex items-center gap-2">
-            {workout.type === WorkoutType.RUN && (
+          {workout.type === WorkoutType.RUN && (
+            <div className="flex items-center gap-2">
               <span className="text-sm">
                 {workout.distance}
                 {workout.distance_unit}
               </span>
-            )}
 
-            {workout.type === WorkoutType.WEIGHT_TRAINING && (
-              <div className="flex items-center gap-1">
+              <span className="text-sm">•</span>
+
+              <span className="text-xs">{`${workout.duration_minutes} min`}</span>
+            </div>
+          )}
+
+          {workout.type === WorkoutType.WEIGHT_TRAINING && (
+            <div className="flex items-start sm:items-center gap-2">
+              <div className="flex items-center gap-1 flex-wrap">
                 {workout.muscle_groups.map((muscleGroup, index) => (
                   <Badge key={index} variant="outline">
                     {capitalize(muscleGroup)}
                   </Badge>
                 ))}
               </div>
-            )}
-
-            <span className="text-sm">•</span>
-
-            <span className="text-sm">{`${workout.duration_minutes} min`}</span>
-          </div>
+            </div>
+          )}
 
           <span>
             {workout.notes && (
@@ -80,12 +82,12 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
             )}
           </span>
         </div>
-        <div>
+        <div className="flex gap-1">
           <EditWorkoutDialog workout={workout} />
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-1">
+              <Button variant="ghost" size="icon" className="size-8">
                 <TrashIcon />
               </Button>
             </AlertDialogTrigger>

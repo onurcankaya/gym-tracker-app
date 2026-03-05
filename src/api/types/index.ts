@@ -2,6 +2,7 @@ import { Run } from './run';
 import { WeightTraining } from './weightTraining';
 
 export enum WorkoutType {
+  ALL = 'all',
   RUN = 'run',
   WEIGHT_TRAINING = 'weight training',
 }
