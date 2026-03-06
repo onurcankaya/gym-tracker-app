@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { InputWithToggle } from '@/components/ui/input-with-toggle';
@@ -102,73 +103,85 @@ export default function WorkoutForm() {
   }, [workoutType, createRun.isPending, createWeightTraining.isPending]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Tabs
-        value={workoutType}
-        onValueChange={(value) => setWorkoutType(value as WorkoutType)}
-        className="block"
-      >
-        <TabsList className="gap-2">
-          <TabsTrigger value={WorkoutType.RUN}>Run</TabsTrigger>
-          <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
-            Weight Training
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value={WorkoutType.RUN} className="mt-4 space-y-4">
-          <InputWithToggle
-            type="number"
-            placeholder="Distance"
-            value={distance}
-            onChange={setDistance}
-            toggleValue={distanceUnit}
-            onToggleChange={(value) => setDistanceUnit(value as DistanceUnit)}
-            toggleOptions={distanceUnitOptions}
-          />
-        </TabsContent>
-        <TabsContent
-          value={WorkoutType.WEIGHT_TRAINING}
-          className="mt-4 space-y-4"
-        >
-          <Select
-            multiSelect
-            placeholder="Select muscle groups"
-            options={muscleGroupOptions}
-            selected={muscleGroups}
-            onChange={(selected) => setMuscleGroups(selected as MuscleGroup[])}
-          />
-        </TabsContent>
-      </Tabs>
+    <Card>
+      <CardHeader>
+        <CardTitle>Log Workout</CardTitle>
+      </CardHeader>
 
-      <div>
-        <InputWithSuffix
-          type="number"
-          placeholder="Duration"
-          value={duration}
-          suffix="min"
-          onChange={(e) => setDuration(e.target.value)}
-          min={0}
-          required
-        />
-      </div>
-      <div>
-        <DatePicker date={createdAt} setDate={setCreatedAt} />
-      </div>
-      <div>
-        <Textarea
-          placeholder="Notes (optional)"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
-      </div>
+      <CardContent className="px-4 sm:px-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Tabs
+            value={workoutType}
+            onValueChange={(value) => setWorkoutType(value as WorkoutType)}
+            className="block"
+          >
+            <TabsList className="gap-2">
+              <TabsTrigger value={WorkoutType.RUN}>Run</TabsTrigger>
+              <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
+                Weight Training
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value={WorkoutType.RUN} className="mt-4 space-y-4">
+              <InputWithToggle
+                type="number"
+                placeholder="Distance"
+                value={distance}
+                onChange={setDistance}
+                toggleValue={distanceUnit}
+                onToggleChange={(value) =>
+                  setDistanceUnit(value as DistanceUnit)
+                }
+                toggleOptions={distanceUnitOptions}
+              />
+            </TabsContent>
+            <TabsContent
+              value={WorkoutType.WEIGHT_TRAINING}
+              className="mt-4 space-y-4"
+            >
+              <Select
+                multiSelect
+                placeholder="Select muscle groups"
+                options={muscleGroupOptions}
+                selected={muscleGroups}
+                onChange={(selected) =>
+                  setMuscleGroups(selected as MuscleGroup[])
+                }
+              />
+            </TabsContent>
+          </Tabs>
 
-      <Button
-        type="submit"
-        variant="primary"
-        disabled={isSubmitButtonDisabled}
-        className="w-full"
-      >
-        {submitButtonLabel}
-      </Button>
-    </form>
+          <div>
+            <InputWithSuffix
+              type="number"
+              placeholder="Duration"
+              value={duration}
+              suffix="min"
+              onChange={(e) => setDuration(e.target.value)}
+              min={0}
+              required
+            />
+          </div>
+          <div>
+            <DatePicker date={createdAt} setDate={setCreatedAt} />
+          </div>
+          <div>
+            <Textarea
+              placeholder="Notes (optional)"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitButtonDisabled}
+            className="w-full"
+          >
+            {submitButtonLabel}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
