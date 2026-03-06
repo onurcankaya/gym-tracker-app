@@ -215,4 +215,13 @@
     background-color: var(--color-neon-green-300) !important;
     color: black !important;
   }
+
+  [data-slot='calendar'] {
+    [data-slot='button'][data-range-start='true'] {
+      background-color: var(--color-neon-green-300) !important;
+    }
+    [data-slot='button'][data-range-end='true'] {
+      background-color: var(--color-neon-green-300) !important;
+    }
+  }
 }
