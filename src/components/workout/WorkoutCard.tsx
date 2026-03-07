@@ -1,23 +1,9 @@
 'use client';
 
 import { capitalize } from 'lodash';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Trash2 as TrashIcon } from 'lucide-react';
 import EditWorkoutDialog from '@/components/workout/EditWorkoutDialog';
-import { useDeleteRun } from '@/hooks/useRuns';
-import { useDeleteWeightTraining } from '@/hooks/useWeightTraining';
+import DeleteWorkoutDialog from '@/components/workout/DeleteWorkoutDialog';
 import { WorkoutType, Workout } from '@/api/types';
 
 type WorkoutCardProps = {
@@ -25,17 +11,6 @@ type WorkoutCardProps = {
 };
 
 export default function WorkoutCard({ workout }: WorkoutCardProps) {
-  const deleteRun = useDeleteRun();
-  const deleteWeightTraining = useDeleteWeightTraining();
-
-  function handleDeleteWorkout(type: WorkoutType, id: string) {
-    if (type === WorkoutType.RUN) {
-      deleteRun.mutate(id);
-    } else if (type === WorkoutType.WEIGHT_TRAINING) {
-      deleteWeightTraining.mutate(id);
-    }
-  }
-
   return (
     <div className="border rounded-md p-4 hover:border-neon-green-300 transition-colors">
       <div className="flex justify-between items-start gap-2">
@@ -82,34 +57,10 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
             )}
           </span>
         </div>
+
         <div className="flex gap-1">
           <EditWorkoutDialog workout={workout} />
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8">
-                <TrashIcon />
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete {workout.type}?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  variant="destructive"
-                  onClick={() => handleDeleteWorkout(workout.type, workout.id)}
-                >
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <DeleteWorkoutDialog workout={workout} />
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Pencil as PencilIcon } from 'lucide-react';
+import { Pencil as PencilIcon, Loader } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import { InputWithToggle } from '@/components/ui/input-with-toggle';
 import { InputWithSuffix } from '@/components/ui/input-with-suffix';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import { DatePicker } from '@/components/common/DatePicker';
 import { useUpdateRun } from '@/hooks/useRuns';
 import { useUpdateWeightTraining } from '@/hooks/useWeightTraining';
@@ -101,9 +102,11 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
   }, [updateRun.isPending, updateWeightTraining.isPending, duration]);
 
   const saveButtonLabel = useMemo(() => {
-    return updateRun.isPending || updateWeightTraining.isPending
-      ? 'Saving changes...'
-      : 'Save changes';
+    return updateRun.isPending || updateWeightTraining.isPending ? (
+      <Spinner icon={Loader} className="text-black" />
+    ) : (
+      'Save changes'
+    );
   }, [updateRun.isPending, updateWeightTraining.isPending]);
 
   return (

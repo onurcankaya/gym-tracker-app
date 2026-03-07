@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Loader } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { InputWithToggle } from '@/components/ui/input-with-toggle';
 import { InputWithSuffix } from '@/components/ui/input-with-suffix';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import { DatePicker } from '@/components/common/DatePicker';
 import { useCreateRun } from '@/hooks/useRuns';
 import { useCreateWeightTraining } from '@/hooks/useWeightTraining';
@@ -94,12 +96,12 @@ export default function WorkoutForm() {
   }, [createRun.isPending, createWeightTraining.isPending]);
 
   const submitButtonLabel = useMemo(() => {
-    if (createRun.isPending) {
-      return 'Logging run...';
-    } else if (createWeightTraining.isPending) {
-      return 'Logging weight training...';
-    }
-    return workoutType === WorkoutType.RUN ? 'Log run' : 'Log weight training';
+    if (createRun.isPending || createWeightTraining.isPending) {
+      return <Spinner icon={Loader} className="text-black" />;
+    } else if (workoutType === WorkoutType.RUN) {
+      return 'Log run';
+    } else if (workoutType === WorkoutType.WEIGHT_TRAINING)
+      return 'Log weight training';
   }, [workoutType, createRun.isPending, createWeightTraining.isPending]);
 
   return (
