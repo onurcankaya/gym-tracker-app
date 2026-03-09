@@ -6,7 +6,7 @@ import { Search, X } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
-import { InputWithSlots } from '@/components/ui/input-with-slots';
+import { InputWithSlots } from '@/components/common/InputWithSlots';
 import WorkoutFilters from '@/components/workout/WorkoutFilters';
 import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';

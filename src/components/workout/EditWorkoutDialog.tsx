@@ -11,8 +11,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { InputWithToggle } from '@/components/ui/input-with-toggle';
-import { InputWithSuffix } from '@/components/ui/input-with-suffix';
+import { InputWithToggle } from '@/components/common/InputWithToggle';
+import { InputWithSuffix } from '@/components/common/InputWithSuffix';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';

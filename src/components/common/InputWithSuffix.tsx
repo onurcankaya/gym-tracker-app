@@ -1,4 +1,4 @@
-import { Input } from './input';
+import { Input } from '../ui/input';
 
 type InputWithSuffixProps = React.ComponentProps<typeof Input> & {
   suffix: string;
