@@ -2,9 +2,15 @@
 
 import { useState, useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
-import { Search, X } from 'lucide-react';
+import {
+  Search as SearchIcon,
+  X as XIcon,
+  RotateCcw as RetryIcon,
+} from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { InputWithSlots } from '@/components/common/InputWithSlots';
 import WorkoutFilters from '@/components/workout/WorkoutFilters';
@@ -18,6 +24,9 @@ export default function WorkoutHistory() {
   const [activeTab, setActiveTab] = useState(WorkoutType.ALL);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateRange, setDateRange] = useState<DateRange>();
+
+  const queryClient = useQueryClient();
+
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,
@@ -101,10 +110,9 @@ export default function WorkoutHistory() {
     return 'No workouts found';
   }, [activeTab]);
 
-  if (errorRuns || errorWeightTrainings)
-    return (
-      <div className="p-8 text-center text-red-600">Error loading workouts</div>
-    );
+  const hasErrors = useMemo(() => {
+    return errorRuns || errorWeightTrainings;
+  }, [errorRuns, errorWeightTrainings]);
 
   return (
     <Card>
@@ -119,72 +127,95 @@ export default function WorkoutHistory() {
           </div>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4 my-4 px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 items-center justify-between">
-            <div className="flex items-end gap-2 w-full sm:w-auto">
-              <TabsList className="gap-2 w-full sm:w-auto sm:my-0 ">
-                <TabsTrigger value={WorkoutType.ALL}>All</TabsTrigger>
-                <TabsTrigger value={WorkoutType.RUN}>Runs</TabsTrigger>
-                <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
-                  Weight Training
-                </TabsTrigger>
-              </TabsList>
-            </div>
-
-            <InputWithSlots
-              type="text"
-              placeholder="Search workouts"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              leftSlot={<Search className="h-4 w-4" />}
-              rightSlot={
-                <WorkoutFilters
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  hasActiveFilters={hasActiveFilters}
-                />
-              }
-              hasValues={hasActiveFilters || searchQuery.length > 0}
-              className="max-w-full sm:max-w-60"
-            />
-          </div>
-
-          {dateRange && (
-            <div
-              className="w-auto sm:w-fit flex items-center justify-between border rounded-full px-3 py-1 border-neon-green-300 cursor-pointer"
-              onClick={() => setDateRange(undefined)}
+        {hasErrors ? (
+          <div className="w-full h-60 flex flex-col items-center justify-center">
+            <p className="p-8 text-sm text-center text-red-500">
+              Error loading workouts
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                queryClient.invalidateQueries({ queryKey: ['runs'] });
+                queryClient.invalidateQueries({
+                  queryKey: ['weight-trainings'],
+                });
+              }}
             >
-              <p className="text-xs">
-                <span>Date range: </span>
-                {dateRange && dateRange.from && dateRange.to && (
-                  <span>
-                    {formatFullDate(dateRange.from)} -{' '}
-                    {formatFullDate(dateRange.to)}
-                  </span>
-                )}
-              </p>
-              <X className="h-3 w-3 ml-3" />
-            </div>
-          )}
-        </CardContent>
+              <RetryIcon />
+              Retry
+            </Button>
+          </div>
+        ) : (
+          <>
+            <CardContent className="flex flex-col gap-4 my-4 px-4 sm:px-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 items-center justify-between">
+                <div className="flex items-end gap-2 w-full sm:w-auto">
+                  <TabsList className="gap-2 w-full sm:w-auto sm:my-0 ">
+                    <TabsTrigger value={WorkoutType.ALL}>All</TabsTrigger>
+                    <TabsTrigger value={WorkoutType.RUN}>Runs</TabsTrigger>
+                    <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
+                      Weight Training
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
-        <CardContent className="space-y-4 px-4 sm:px-6">
-          {isLoading ? (
-            <div className="w-full h-80 flex items-center justify-center">
-              <Spinner className="size-12 text-neon-green-300" />
-            </div>
-          ) : filteredWorkouts.length > 0 ? (
-            filteredWorkouts.map((workout) => (
-              <WorkoutCard key={workout.id} workout={workout} />
-            ))
-          ) : (
-            <div className="flex items-center justify-center min-h-[160px]">
-              <p className="text-sm text-gray-400 text-center">
-                {notFoundMessage}
-              </p>
-            </div>
-          )}
-        </CardContent>
+                <InputWithSlots
+                  type="text"
+                  placeholder="Search workouts"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  leftSlot={<SearchIcon className="h-4 w-4" />}
+                  rightSlot={
+                    <WorkoutFilters
+                      dateRange={dateRange}
+                      setDateRange={setDateRange}
+                      hasActiveFilters={hasActiveFilters}
+                    />
+                  }
+                  hasValues={hasActiveFilters || searchQuery.length > 0}
+                  className="max-w-full sm:max-w-60"
+                />
+              </div>
+
+              {dateRange && (
+                <div
+                  className="w-auto sm:w-fit flex items-center justify-between border rounded-full px-3 py-1 border-neon-green-300 cursor-pointer"
+                  onClick={() => setDateRange(undefined)}
+                >
+                  <p className="text-xs">
+                    <span>Date range: </span>
+                    {dateRange && dateRange.from && dateRange.to && (
+                      <span>
+                        {formatFullDate(dateRange.from)} -{' '}
+                        {formatFullDate(dateRange.to)}
+                      </span>
+                    )}
+                  </p>
+                  <XIcon className="h-3 w-3 ml-3" />
+                </div>
+              )}
+            </CardContent>
+
+            <CardContent className="space-y-4 px-4 sm:px-6">
+              {isLoading ? (
+                <div className="w-full h-80 flex items-center justify-center">
+                  <Spinner className="size-12 text-neon-green-300" />
+                </div>
+              ) : filteredWorkouts.length > 0 ? (
+                filteredWorkouts.map((workout) => (
+                  <WorkoutCard key={workout.id} workout={workout} />
+                ))
+              ) : (
+                <div className="flex items-center justify-center min-h-[160px]">
+                  <p className="text-sm text-gray-400 text-center">
+                    {notFoundMessage}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </>
+        )}
       </Tabs>
     </Card>
   );
