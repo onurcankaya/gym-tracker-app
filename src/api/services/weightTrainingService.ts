@@ -6,11 +6,14 @@ import {
 } from '@/api/types/weightTraining';
 
 export class WeightTrainingService {
-  static async getAllWeightTrainings(): Promise<WeightTraining[]> {
-    return WeightTrainingModel.findAll();
+  static async getAllWeightTrainings(
+    userId: string,
+  ): Promise<WeightTraining[]> {
+    return WeightTrainingModel.findAll(userId);
   }
 
   static async createWeightTraining(
+    userId: string,
     data: CreateWeightTrainingDTO,
   ): Promise<WeightTraining> {
     if (!data.muscle_groups || data.muscle_groups.length === 0) {
@@ -21,21 +24,25 @@ export class WeightTrainingService {
       throw new Error('Duration must be positive');
     }
 
-    return WeightTrainingModel.create(data);
+    return WeightTrainingModel.create(userId, data);
   }
 
-  static async deleteWeightTraining(id: string): Promise<void> {
-    if (!id) {
+  static async deleteWeightTraining(
+    userId: string,
+    weightTrainingId: string,
+  ): Promise<void> {
+    if (!weightTrainingId) {
       throw new Error('Invalid weight training id');
     }
-    return WeightTrainingModel.delete(id);
+    return WeightTrainingModel.delete(userId, weightTrainingId);
   }
 
   static async updateWeightTraining(
-    id: string,
+    userId: string,
+    weightTrainingId: string,
     data: UpdateWeightTrainingDTO,
   ): Promise<WeightTraining> {
-    if (!id) {
+    if (!weightTrainingId) {
       throw new Error('Invalid weight training id');
     }
 
@@ -47,6 +54,6 @@ export class WeightTrainingService {
       throw new Error('Duration must be positive');
     }
 
-    return WeightTrainingModel.update(id, data);
+    return WeightTrainingModel.update(userId, weightTrainingId, data);
   }
 }

@@ -53,7 +53,7 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
 
           <span>
             {workout.notes && (
-              <p className="text-xs text-gray-500 mt-2">{workout.notes}</p>
+              <p className="text-xs text-gray-500 mt-4">{workout.notes}</p>
             )}
           </span>
         </div>

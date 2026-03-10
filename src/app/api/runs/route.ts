@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { RunService } from '@/api/services/runService';
 
 export async function GET() {
   try {
-    const runs = await RunService.getAllRuns();
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const runs = await RunService.getAllRuns(session.user.id);
     return NextResponse.json(runs);
   } catch (error) {
     return NextResponse.json(
@@ -15,8 +23,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
-    const run = await RunService.createRun(body);
+    const run = await RunService.createRun(session.user.id, body);
 
     return NextResponse.json(run, { status: 201 });
   } catch (error) {
