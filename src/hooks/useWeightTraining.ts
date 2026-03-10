@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { weightTrainingClient } from '@/api/client/weightTrainingClient';
+import { toast } from 'sonner';
 
 export function useWeightTrainings() {
   return useQuery({
@@ -15,6 +16,10 @@ export function useCreateWeightTraining() {
     mutationFn: weightTrainingClient.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
+      toast.success('Workout created');
+    },
+    onError: () => {
+      toast.error('Failed to create workout');
     },
   });
 }
@@ -26,6 +31,10 @@ export function useDeleteWeightTraining() {
     mutationFn: weightTrainingClient.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
+      toast.success('Workout deleted');
+    },
+    onError: () => {
+      toast.error('Failed to delete workout');
     },
   });
 }
@@ -37,6 +46,10 @@ export function useUpdateWeightTraining() {
     mutationFn: weightTrainingClient.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
+      toast.success('Workout updated');
+    },
+    onError: () => {
+      toast.error('Failed to update workout');
     },
   });
 }

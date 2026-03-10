@@ -76,7 +76,7 @@ export default function WorkoutForm() {
     setCreatedAt(new Date());
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     handleCreateWorkout();
   }
