@@ -171,6 +171,15 @@
     @apply bg-background text-foreground;
   }
 
+  [data-slot='button'],
+  [data-slot='tabs-trigger'],
+  [data-slot='dialog-trigger'],
+  [data-slot='alert-dialog-trigger'],
+  [data-slot='popover-trigger'],
+  [data-slot='dialog-close'] {
+    cursor: pointer !important;
+  }
+
   [data-slot='card'] {
     gap: 1rem !important;
   }

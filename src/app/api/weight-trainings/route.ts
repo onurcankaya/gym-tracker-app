@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { WeightTrainingService } from '@/api/services/weightTrainingService';
 
 export async function GET() {
   try {
-    const weightTrainings = await WeightTrainingService.getAllWeightTrainings();
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const weightTrainings = await WeightTrainingService.getAllWeightTrainings(
+      session.user.id,
+    );
     return NextResponse.json(weightTrainings);
   } catch (error) {
     return NextResponse.json(
@@ -15,9 +25,17 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
-    const weightTraining =
-      await WeightTrainingService.createWeightTraining(body);
+    const weightTraining = await WeightTrainingService.createWeightTraining(
+      session.user.id,
+      body,
+    );
 
     return NextResponse.json(weightTraining, { status: 201 });
   } catch (error) {

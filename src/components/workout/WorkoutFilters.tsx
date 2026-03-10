@@ -12,6 +12,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { DateRangePicker } from '@/components/common/DateRangePicker';
 import { cn } from '@/lib/utils';
 
@@ -45,7 +46,9 @@ export default function WorkoutFilters({
 
         <div className="space-y-4 my-4">
           <div>
-            <p className="text-sm mb-2">Workout date</p>
+            <Label htmlFor="dateRange" className="mb-2">
+              Workout date
+            </Label>
             <DateRangePicker
               dateRange={dateRange}
               setDateRange={setDateRange}

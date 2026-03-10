@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { WeightTrainingService } from '@/api/services/weightTrainingService';
 
 export async function DELETE(
@@ -6,9 +8,18 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const params = await context.params;
 
-    await WeightTrainingService.deleteWeightTraining(params.id);
+    await WeightTrainingService.deleteWeightTraining(
+      session.user.id,
+      params.id,
+    );
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
@@ -29,9 +40,16 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const params = await context.params;
     const body = await request.json();
     const weightTraining = await WeightTrainingService.updateWeightTraining(
+      session.user.id,
       params.id,
       body,
     );
