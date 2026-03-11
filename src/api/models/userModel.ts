@@ -34,7 +34,7 @@ export class UserModel {
 
     values.push(id);
 
-    const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
+    const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING id, email, name, created_at`;
 
     const result = await pool.query(query, values);
 

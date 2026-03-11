@@ -15,6 +15,10 @@ export class UserService {
       throw new Error('Invalid user id');
     }
 
+    if (data.name !== undefined && data.name.length === 0) {
+      throw new Error('Invalid name');
+    }
+
     if (data.email && !data.email.includes('@')) {
       throw new Error('Invalid email format');
     }

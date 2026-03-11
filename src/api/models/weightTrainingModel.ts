@@ -86,7 +86,7 @@ export class WeightTrainingModel {
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
-      throw new Error('Weight training not found');
+      throw new Error('Weight training not found or unauthorized');
     }
 
     return result.rows[0];

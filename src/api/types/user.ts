@@ -5,6 +5,6 @@ export type User = {
 };
 
 export type UpdateUserDTO = {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
 };
