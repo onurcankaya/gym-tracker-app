@@ -1,8 +1,14 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Loader } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader, Plus } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +24,7 @@ import { DistanceUnit } from '@/api/types/run';
 import { MuscleGroup } from '@/api/types/weightTraining';
 
 export default function WorkoutForm() {
+  const [open, setOpen] = useState(false);
   const [workoutType, setWorkoutType] = useState<WorkoutType>(WorkoutType.RUN);
   const [distance, setDistance] = useState('');
   const [distanceUnit, setDistanceUnit] = useState<DistanceUnit>(
@@ -74,6 +81,8 @@ export default function WorkoutForm() {
     setDuration('');
     setNotes('');
     setCreatedAt(new Date());
+    setWorkoutType(WorkoutType.RUN);
+    setOpen(false);
   }
 
   function handleSubmit(e: React.SubmitEvent) {
@@ -105,12 +114,21 @@ export default function WorkoutForm() {
   }, [workoutType, createRun.isPending, createWeightTraining.isPending]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Log Workout</CardTitle>
-      </CardHeader>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <div className="flex justify-end mt-4 md:mt-0">
+          <Button variant="primary" size="sm">
+            <Plus />
+            Log workout
+          </Button>
+        </div>
+      </DialogTrigger>
 
-      <CardContent className="px-4 sm:px-6">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Log {workoutType}</DialogTitle>
+        </DialogHeader>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <Tabs
             value={workoutType}
@@ -183,7 +201,7 @@ export default function WorkoutForm() {
             {submitButtonLabel}
           </Button>
         </form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -51,6 +51,14 @@ export default function Header() {
             variant="outline"
             size="sm"
             className="w-full text-xs sm:text-sm"
+            onClick={() => router.push('/')}
+          >
+            Workouts
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-xs sm:text-sm"
             onClick={() => router.push('/profile')}
           >
             Profile
