@@ -27,3 +27,11 @@ export type UpdateRunDTO = {
   notes?: string | null;
   created_at?: Date;
 };
+
+export type RunStats = {
+  total_runs: string;
+  total_distance: string;
+  total_time: string;
+  avg_distance: string;
+  avg_duration: string;
+};
