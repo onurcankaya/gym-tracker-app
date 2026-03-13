@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
 import { Loader, Plus } from 'lucide-react';
 import {
   Dialog,
@@ -39,6 +40,8 @@ export default function WorkoutForm() {
   const createWeightTraining = useCreateWeightTraining();
 
   function handleCreateWorkout() {
+    const formattedDate = format(createdAt, 'yyyy-MM-dd');
+
     if (workoutType === WorkoutType.RUN) {
       createRun.mutate(
         {
@@ -48,7 +51,7 @@ export default function WorkoutForm() {
           duration_minutes:
             typeof duration === 'string' ? parseInt(duration) : duration,
           notes,
-          created_at: createdAt,
+          created_at: formattedDate,
         },
         {
           onSuccess: () => {
@@ -63,7 +66,7 @@ export default function WorkoutForm() {
           duration_minutes:
             typeof duration === 'string' ? parseInt(duration) : duration,
           notes,
-          created_at: createdAt,
+          created_at: formattedDate,
         },
         {
           onSuccess: () => {

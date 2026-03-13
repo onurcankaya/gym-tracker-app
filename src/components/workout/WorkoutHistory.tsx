@@ -18,6 +18,7 @@ import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTraining';
 import { formatFullDate } from '@/lib/dateUtils';
+import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { WorkoutType, Workout } from '@/api/types';
 
 export default function WorkoutHistory() {
@@ -59,10 +60,13 @@ export default function WorkoutHistory() {
       activeTab === WorkoutType.RUN ||
       activeTab === WorkoutType.WEIGHT_TRAINING
     ) {
-      return sortByDate(items.filter((item) => item.type === activeTab));
+      return sortByWorkoutDate(
+        items.filter((item) => item.type === activeTab),
+        'desc',
+      );
     }
 
-    return sortByDate(items);
+    return sortByWorkoutDate(items, 'desc');
   }, [activeTab, dateRange, runs, weightTrainings]);
 
   const filteredWorkouts = useMemo(() => {
@@ -71,11 +75,11 @@ export default function WorkoutHistory() {
 
     return allWorkouts.filter((workout) => {
       const search = searchQuery.toLowerCase();
-      const type = workout.type.toLowerCase();
+      const type = workout.type?.toLowerCase();
       const notes = workout.notes?.toLowerCase() || '';
 
       return (
-        type.includes(search) ||
+        type?.includes(search) ||
         notes.includes(search) ||
         (workout.type === WorkoutType.WEIGHT_TRAINING &&
           workout.muscle_groups?.some((muscleGroup) =>
@@ -84,13 +88,6 @@ export default function WorkoutHistory() {
       );
     });
   }, [searchQuery, allWorkouts]);
-
-  function sortByDate(items: Workout[]) {
-    return items.sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    );
-  }
 
   const hasActiveFilters = useMemo(() => {
     return !!dateRange?.from || !!dateRange?.to;

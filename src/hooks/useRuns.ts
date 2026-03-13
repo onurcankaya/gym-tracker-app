@@ -53,3 +53,10 @@ export function useUpdateRun() {
     },
   });
 }
+
+export function useRunStats() {
+  return useQuery({
+    queryKey: ['runStats'],
+    queryFn: runClient.getStats,
+  });
+}

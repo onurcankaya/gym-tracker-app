@@ -1,7 +1,8 @@
-import { Run, CreateRunDTO, UpdateRunDTO } from '@/api/types/run';
+import { Run, CreateRunDTO, UpdateRunDTO, RunStats } from '@/api/types/run';
 
 const BASE_URL = '/api';
 const RUNS_URL = `${BASE_URL}/runs`;
+const RUN_STATS_URL = `${BASE_URL}/runs/stats`;
 
 export const runClient = {
   getAll: async (): Promise<Run[]> => {
@@ -46,6 +47,14 @@ export const runClient = {
     });
 
     if (!response.ok) throw new Error('Failed to update run');
+
+    return response.json();
+  },
+
+  getStats: async (): Promise<RunStats> => {
+    const response = await fetch(RUN_STATS_URL);
+
+    if (!response.ok) throw new Error('Failed to fetch run stats');
 
     return response.json();
   },

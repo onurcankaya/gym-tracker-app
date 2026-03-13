@@ -1,5 +1,4 @@
 import pool from '@/lib/db';
-import { formatDateForDb } from '@/lib/dateUtils';
 import {
   WeightTraining,
   CreateWeightTrainingDTO,
@@ -70,7 +69,7 @@ export class WeightTrainingModel {
 
     if (data.created_at !== undefined) {
       fields.push(`created_at = $${paramIndex}`);
-      values.push(formatDateForDb(data.created_at));
+      values.push(data.created_at);
       paramIndex++;
     }
 

@@ -181,7 +181,7 @@
   }
 
   [data-slot='card'] {
-    gap: 1rem !important;
+    gap: 0.75rem !important;
   }
 
   [data-slot='tabs-list'] {
@@ -226,9 +226,8 @@
   }
 
   [data-slot='calendar'] {
-    [data-slot='button'][data-range-start='true'] {
-      background-color: var(--color-neon-green-300) !important;
-    }
+    [data-slot='button'][data-selected-single='true'],
+    [data-slot='button'][data-range-start='true'],
     [data-slot='button'][data-range-end='true'] {
       background-color: var(--color-neon-green-300) !important;
     }

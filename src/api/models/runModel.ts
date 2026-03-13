@@ -1,6 +1,5 @@
 import pool from '@/lib/db';
-import { formatDateForDb } from '@/lib/dateUtils';
-import { Run, CreateRunDTO, UpdateRunDTO } from '@/api/types/run';
+import { Run, CreateRunDTO, UpdateRunDTO, RunStats } from '@/api/types/run';
 
 export class RunModel {
   static async findAll(userId: string): Promise<Run[]> {
@@ -70,7 +69,7 @@ export class RunModel {
 
     if (data.created_at !== undefined) {
       fields.push(`created_at = $${paramIndex}`);
-      values.push(formatDateForDb(data.created_at));
+      values.push(data.created_at);
       paramIndex++;
     }
 
@@ -88,6 +87,23 @@ export class RunModel {
     if (result.rows.length === 0) {
       throw new Error('Run not found or unauthorized');
     }
+
+    return result.rows[0];
+  }
+
+  static async getStats(userId: string): Promise<RunStats> {
+    const result = await pool.query(
+      `SELECT
+        COUNT(*) as total_runs,
+        COALESCE(SUM(distance), 0) as total_distance,
+        COALESCE(SUM(duration_minutes), 0) as total_time,
+        COALESCE(AVG(distance), 0) as avg_distance,
+        COALESCE(AVG(duration_minutes), 0) as avg_duration
+        FROM runs
+        WHERE user_id = $1
+        `,
+      [userId],
+    );
 
     return result.rows[0];
   }
