@@ -8,5 +8,5 @@ export enum WorkoutType {
 }
 
 export type Workout =
-  | (Run & { type: WorkoutType.RUN })
-  | (WeightTraining & { type: WorkoutType.WEIGHT_TRAINING });
+  | (Run & { type?: WorkoutType.RUN })
+  | (WeightTraining & { type?: WorkoutType.WEIGHT_TRAINING });

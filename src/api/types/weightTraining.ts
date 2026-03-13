@@ -19,12 +19,12 @@ export type CreateWeightTrainingDTO = {
   muscle_groups: MuscleGroup[];
   duration_minutes: number;
   notes?: string | null;
-  created_at?: Date;
+  created_at?: string;
 };
 
 export type UpdateWeightTrainingDTO = {
   muscle_groups?: MuscleGroup[];
   duration_minutes?: number;
   notes?: string | null;
-  created_at?: Date;
+  created_at?: string;
 };

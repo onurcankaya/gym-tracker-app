@@ -17,7 +17,7 @@ export type CreateRunDTO = {
   distance_unit: DistanceUnit;
   duration_minutes: number;
   notes?: string | null;
-  created_at?: Date;
+  created_at?: string;
 };
 
 export type UpdateRunDTO = {
@@ -25,7 +25,7 @@ export type UpdateRunDTO = {
   distance_unit?: DistanceUnit;
   duration_minutes?: number;
   notes?: string | null;
-  created_at?: Date;
+  created_at?: string;
 };
 
 export type RunStats = {

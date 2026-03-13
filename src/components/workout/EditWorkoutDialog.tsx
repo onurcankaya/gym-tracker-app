@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
 import { Pencil as PencilIcon, Loader } from 'lucide-react';
 import {
   Dialog,
@@ -46,6 +47,8 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
   const updateWeightTraining = useUpdateWeightTraining();
 
   function handleUpdateWorkout() {
+    const formattedDate = format(createdAt, 'yyyy-MM-dd');
+
     if (workout.type === WorkoutType.RUN) {
       updateRun.mutate(
         {
@@ -56,7 +59,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
             distance_unit: distanceUnit,
             duration_minutes: duration,
             notes,
-            created_at: createdAt,
+            created_at: formattedDate,
           },
         },
         {
@@ -73,7 +76,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
             muscle_groups: muscleGroups,
             duration_minutes: duration,
             notes,
-            created_at: createdAt,
+            created_at: formattedDate,
           },
         },
         {
