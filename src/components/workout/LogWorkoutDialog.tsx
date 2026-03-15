@@ -19,7 +19,7 @@ import { InputWithToggle } from '@/components/common/InputWithToggle';
 import { InputWithSuffix } from '@/components/common/InputWithSuffix';
 import { DatePicker } from '@/components/common/DatePicker';
 import { useCreateRun } from '@/hooks/useRuns';
-import { useCreateWeightTraining } from '@/hooks/useWeightTraining';
+import { useCreateWeightTraining } from '@/hooks/useWeightTrainings';
 import { WorkoutType } from '@/api/types';
 import { DistanceUnit } from '@/api/types/run';
 import { MuscleGroup } from '@/api/types/weightTraining';

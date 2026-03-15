@@ -3,6 +3,7 @@ import {
   WeightTraining,
   CreateWeightTrainingDTO,
   UpdateWeightTrainingDTO,
+  WeightTrainingStats,
 } from '@/api/types/weightTraining';
 
 export class WeightTrainingService {
@@ -55,5 +56,9 @@ export class WeightTrainingService {
     }
 
     return WeightTrainingModel.update(userId, weightTrainingId, data);
+  }
+
+  static async getStats(userId: string): Promise<WeightTrainingStats> {
+    return WeightTrainingModel.getStats(userId);
   }
 }

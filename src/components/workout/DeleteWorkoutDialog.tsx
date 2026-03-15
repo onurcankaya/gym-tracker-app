@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import DeleteDialog from '@/components/common/DeleteDialog';
 import { useDeleteRun } from '@/hooks/useRuns';
-import { useDeleteWeightTraining } from '@/hooks/useWeightTraining';
+import { useDeleteWeightTraining } from '@/hooks/useWeightTrainings';
 import { WorkoutType, Workout } from '@/api/types';
 
 type WorkoutCardProps = {

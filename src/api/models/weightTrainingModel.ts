@@ -3,6 +3,7 @@ import {
   WeightTraining,
   CreateWeightTrainingDTO,
   UpdateWeightTrainingDTO,
+  WeightTrainingStats,
 } from '@/api/types/weightTraining';
 
 export class WeightTrainingModel {
@@ -87,6 +88,21 @@ export class WeightTrainingModel {
     if (result.rows.length === 0) {
       throw new Error('Weight training not found or unauthorized');
     }
+
+    return result.rows[0];
+  }
+
+  static async getStats(userId: string): Promise<WeightTrainingStats> {
+    const result = await pool.query(
+      `SELECT
+        COUNT(*) as total_workouts,
+        COALESCE(SUM(duration_minutes), 0) as total_time,
+        COALESCE(AVG(duration_minutes), 0) as avg_duration
+        FROM weight_trainings
+        WHERE user_id = $1
+      `,
+      [userId],
+    );
 
     return result.rows[0];
   }
