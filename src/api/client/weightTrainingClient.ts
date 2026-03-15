@@ -2,10 +2,12 @@ import {
   WeightTraining,
   CreateWeightTrainingDTO,
   UpdateWeightTrainingDTO,
+  WeightTrainingStats,
 } from '@/api/types/weightTraining';
 
 const BASE_URL = '/api';
 const WEIGHT_TRAININGS_URL = `${BASE_URL}/weight-trainings`;
+const WEIGHT_TRAININGS_STATS_URL = `${BASE_URL}/weight-trainings/stats`;
 
 export const weightTrainingClient = {
   getAll: async (): Promise<WeightTraining[]> => {
@@ -50,6 +52,14 @@ export const weightTrainingClient = {
     });
 
     if (!response.ok) throw new Error('Failed to update weight training');
+
+    return response.json();
+  },
+
+  getStats: async (): Promise<WeightTrainingStats> => {
+    const response = await fetch(WEIGHT_TRAININGS_STATS_URL);
+
+    if (!response.ok) throw new Error('Failed to fetch weight training stats');
 
     return response.json();
   },

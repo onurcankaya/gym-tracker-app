@@ -7,12 +7,12 @@ import { RotateCcw as RetryIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
-import LineChart from '@/components/charts/LineChart';
+import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
 import { useRuns } from '@/hooks/useRuns';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { Run } from '@/api/types/run';
 
-export default function RunChart() {
+export default function DistanceOverTime() {
   const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
@@ -31,15 +31,15 @@ export default function RunChart() {
   }, [runs]);
 
   return (
-    <Card className="w-full min-h-80 py-5 sm:py-6">
-      <CardHeader>
-        <CardTitle>Distance Over Time</CardTitle>
+    <Card className="w-full min-h-80 py-4 sm:py-5">
+      <CardHeader className="px-4 sm:px-6">
+        <CardTitle className="text-sm sm:text-md">Distance Over Time</CardTitle>
       </CardHeader>
 
       {error ? (
         <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           <p className="p-8 text-sm text-center text-red-500">
-            Error loading run chart
+            Error loading distance over time chart
           </p>
           <Button
             variant="outline"
@@ -61,6 +61,7 @@ export default function RunChart() {
               chartData={chartData}
               xAxisDataKey="date"
               lineDataKey="distance"
+              yAxisUnit="km"
             />
           )}
         </CardContent>

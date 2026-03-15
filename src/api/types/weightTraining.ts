@@ -28,3 +28,9 @@ export type UpdateWeightTrainingDTO = {
   notes?: string | null;
   created_at?: string;
 };
+
+export type WeightTrainingStats = {
+  total_workouts: string;
+  total_time: string;
+  avg_duration: string;
+};

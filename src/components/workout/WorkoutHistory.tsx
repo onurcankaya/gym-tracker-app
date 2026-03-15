@@ -16,7 +16,7 @@ import { InputWithSlots } from '@/components/common/InputWithSlots';
 import WorkoutFilters from '@/components/workout/WorkoutFilters';
 import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';
-import { useWeightTrainings } from '@/hooks/useWeightTraining';
+import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { formatFullDate } from '@/lib/dateUtils';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { WorkoutType, Workout } from '@/api/types';
@@ -148,7 +148,7 @@ export default function WorkoutHistory() {
             <CardContent className="flex flex-col gap-4 my-4 px-4 sm:px-6">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 items-center justify-between">
                 <div className="flex items-end gap-2 w-full sm:w-auto">
-                  <TabsList className="gap-2 w-full sm:w-auto sm:my-0 ">
+                  <TabsList className="w-full gap-2 sm:w-auto sm:my-0 ">
                     <TabsTrigger value={WorkoutType.ALL}>All</TabsTrigger>
                     <TabsTrigger value={WorkoutType.RUN}>Runs</TabsTrigger>
                     <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>

@@ -53,3 +53,10 @@ export function useUpdateWeightTraining() {
     },
   });
 }
+
+export function useWeightTrainingStats() {
+  return useQuery({
+    queryKey: ['weightTrainingStats'],
+    queryFn: weightTrainingClient.getStats,
+  });
+}

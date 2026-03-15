@@ -19,7 +19,7 @@ import { Select } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import { DatePicker } from '@/components/common/DatePicker';
 import { useUpdateRun } from '@/hooks/useRuns';
-import { useUpdateWeightTraining } from '@/hooks/useWeightTraining';
+import { useUpdateWeightTraining } from '@/hooks/useWeightTrainings';
 import { WorkoutType, Workout } from '@/api/types';
 import { DistanceUnit } from '@/api/types/run';
 import { MuscleGroup } from '@/api/types/weightTraining';

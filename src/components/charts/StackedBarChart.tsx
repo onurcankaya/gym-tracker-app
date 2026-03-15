@@ -1,8 +1,8 @@
 'use client';
 
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,24 +11,30 @@ import {
 } from 'recharts';
 import { capitalize } from 'lodash';
 
-type LineChartComponentProps = {
-  chartData: any;
+type StackedBarChartProps = {
+  chartData: Record<string, string | number>[] | undefined;
   xAxisDataKey: string;
-  lineDataKey: string;
-  yAxisUnit: string;
+  barColors: Record<string, string>;
 };
 
-export function LineChartComponent({
+export function StackedBarChart({
   chartData,
   xAxisDataKey,
-  lineDataKey,
-  yAxisUnit,
-}: LineChartComponentProps) {
+  barColors,
+}: StackedBarChartProps) {
+  const barData = Array.from(
+    new Set(
+      chartData?.flatMap((item) =>
+        Object.keys(item).filter((key) => key !== xAxisDataKey),
+      ) || [],
+    ),
+  );
+
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <LineChart
+      <BarChart
         data={chartData}
-        margin={{ top: 20, right: 10, left: -15, bottom: 0 }}
+        margin={{ top: 5, right: 10, left: -50, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-700)" />
         <XAxis
@@ -38,13 +44,13 @@ export function LineChartComponent({
           axisLine={{ stroke: 'var(--color-gray-700)' }}
         />
         <YAxis
-          unit={yAxisUnit}
-          domain={[0, 'auto']}
-          tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dx: -4, dy: -4 }}
+          domain={[0, 'dataMax + 1']}
+          tick={false}
           tickLine={false}
           axisLine={{ stroke: 'var(--color-gray-700)' }}
         />
         <Tooltip
+          cursor={{ fill: 'transparent' }}
           contentStyle={{
             backgroundColor: 'var(--color-black)',
             border: '1px solid var(--color-gray-700)',
@@ -60,19 +66,26 @@ export function LineChartComponent({
             color: 'var(--color-neon-green-300)',
             fontSize: '12px',
           }}
-          formatter={(value, name) => [
-            `${value}${yAxisUnit}`,
-            capitalize(lineDataKey),
-          ]}
+          formatter={(value, name) => [`${capitalize(name as string)}`]}
         />
-        <Line
-          dataKey={lineDataKey}
-          stroke="var(--color-neon-green-300)"
-          strokeWidth={2}
-          dot={{ fill: 'var(--color-neon-green-300)', r: 2 }}
-          activeDot={{ r: 4 }}
-        />
-      </LineChart>
+        {barData.map((barKey) => {
+          return (
+            <Bar
+              key={barKey}
+              dataKey={barKey}
+              stackId="a"
+              fill={barColors[barKey]}
+              barSize={60}
+              label={{
+                position: 'center',
+                fill: '#000',
+                fontSize: 12,
+                formatter: () => capitalize(barKey),
+              }}
+            />
+          );
+        })}
+      </BarChart>
     </ResponsiveContainer>
   );
 }
