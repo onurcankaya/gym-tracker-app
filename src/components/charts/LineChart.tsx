@@ -6,40 +6,53 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  Legend,
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { AxisDomain } from 'recharts/types/util/types';
 import { capitalize } from 'lodash';
 
 type LineChartComponentProps = {
   chartData: any;
+  lineData: { key: string; color?: string }[];
   xAxisDataKey: string;
-  lineDataKey: string;
-  yAxisUnit: string;
+  yAxisUnit?: string;
+  yAxisRange?: AxisDomain;
+  showLegend?: boolean;
 };
 
 export function LineChartComponent({
   chartData,
+  lineData,
   xAxisDataKey,
-  lineDataKey,
-  yAxisUnit,
+  yAxisUnit = '',
+  yAxisRange = [0, 'auto'],
+  showLegend = false,
 }: LineChartComponentProps) {
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart
         data={chartData}
-        margin={{ top: 20, right: 10, left: -15, bottom: 0 }}
+        margin={{
+          top: 20,
+          right: 10,
+          left: 10,
+          bottom: 0,
+        }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-700)" />
         <XAxis
           dataKey={xAxisDataKey}
+          interval="preserveStartEnd"
           tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dy: 4 }}
           tickLine={false}
           axisLine={{ stroke: 'var(--color-gray-700)' }}
         />
         <YAxis
+          width="auto"
           unit={yAxisUnit}
-          domain={[0, 'auto']}
+          domain={yAxisRange}
           tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dx: -4, dy: -4 }}
           tickLine={false}
           axisLine={{ stroke: 'var(--color-gray-700)' }}
@@ -57,21 +70,42 @@ export function LineChartComponent({
             marginBottom: '4px',
           }}
           itemStyle={{
-            color: 'var(--color-neon-green-300)',
             fontSize: '12px',
           }}
           formatter={(value, name) => [
             `${value}${yAxisUnit}`,
-            capitalize(lineDataKey),
+            capitalize(name as string),
           ]}
         />
-        <Line
-          dataKey={lineDataKey}
-          stroke="var(--color-neon-green-300)"
-          strokeWidth={2}
-          dot={{ fill: 'var(--color-neon-green-300)', r: 2 }}
-          activeDot={{ r: 4 }}
-        />
+        {showLegend && (
+          <Legend
+            iconType="circle"
+            iconSize={6}
+            height={20}
+            wrapperStyle={{
+              marginTop: '10px',
+            }}
+            labelStyle={{
+              fontSize: '12px',
+              marginLeft: '2px',
+              marginRight: '4px',
+            }}
+            formatter={(value) => capitalize(value)}
+          />
+        )}
+        {lineData.map((line, index) => (
+          <Line
+            key={line.key}
+            dataKey={line.key}
+            stroke={line.color ?? `var(--color-chart-${index + 1})`}
+            strokeWidth={2}
+            dot={{
+              fill: line.color ?? `var(--color-chart-${index + 1})`,
+              r: 2,
+            }}
+            activeDot={{ r: 4 }}
+          />
+        ))}
       </LineChart>
     </ResponsiveContainer>
   );

@@ -47,6 +47,12 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* custom colors */
+  --color-neon-green: #1aeb00 !important;
+  --color-cyan: #00ffff !important;
+
+  --color-run: var(--color-neon-green) !important;
+  --color-weight-training: var(--color-cyan) !important;
+
   --color-neon-green-100: #7fff00 !important;
   --color-neon-green-200: #39ff14 !important;
   --color-neon-green-300: #1aeb00 !important;
@@ -60,6 +66,17 @@
   --color-pastel-green-400: #00e599 !important;
   --color-pastel-green-500: #00db9a !important;
   --color-pastel-green-600: #00b27d !important;
+
+  --color-chart-1: #8884d8;
+  --color-chart-2: #a4de6c;
+  --color-chart-3: #ffc658;
+  --color-chart-4: #8dd1e1;
+  --color-chart-5: #d0ed57;
+  --color-chart-6: #83a6ed;
+  --color-chart-7: #ff7300;
+  --color-chart-8: #413ea0;
+  --color-chart-9: #6ea1c7;
+  --color-chart-10: #ed7485;
 }
 
 :root {

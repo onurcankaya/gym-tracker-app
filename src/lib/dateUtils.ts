@@ -14,5 +14,5 @@ export function formatMinutesToHours(minutes: number | string) {
   if (typeof minutes === 'string') {
     return `${Math.floor(parseInt(minutes) / 60)}h ${parseInt(minutes) % 60}m`;
   }
-  return `${minutes / 60}h ${minutes % 60}m`;
+  return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
 }
