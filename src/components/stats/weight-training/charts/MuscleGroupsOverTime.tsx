@@ -7,10 +7,10 @@ import { RotateCcw as RetryIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
-import { StackedBarChart } from '@/components/charts/StackedBarChart';
+import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
-import { muscleGroupColors } from '@/lib/weightTrainingUtils';
+import { muscleGroupColors } from '@/lib/colors';
 import { WeightTraining } from '@/api/types/weightTraining';
 
 export default function MuscleGroupsOverTime() {
@@ -46,7 +46,7 @@ export default function MuscleGroupsOverTime() {
 
   return (
     <Card className="w-full min-h-60 sm:min-h-80 py-4 sm:py-5">
-      <CardHeader className="px-4 sm:px-5">
+      <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">
           Muscle Groups Over Time
         </CardTitle>
@@ -73,10 +73,11 @@ export default function MuscleGroupsOverTime() {
           {isLoading ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
-            <StackedBarChart
+            <BarChart
               chartData={chartData}
               barColors={muscleGroupColors}
               xAxisDataKey="date"
+              isStacked={true}
             />
           )}
         </CardContent>

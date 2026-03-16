@@ -59,8 +59,10 @@ export default function DistanceOverTime() {
           ) : (
             <LineChart
               chartData={chartData}
+              lineData={[
+                { key: 'distance', color: 'var(--color-neon-green-300)' },
+              ]}
               xAxisDataKey="date"
-              lineDataKey="distance"
               yAxisUnit="km"
             />
           )}
