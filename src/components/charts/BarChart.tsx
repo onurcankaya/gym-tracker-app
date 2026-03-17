@@ -10,12 +10,15 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import { AxisDomain } from 'recharts/types/util/types';
 import { capitalize } from 'lodash';
 
 type BarChartProps = {
   chartData: Record<string, string | number>[] | undefined;
   xAxisDataKey: string;
+  yAxisRange?: AxisDomain;
   barColors: Record<string, string>;
+  barSize?: number;
   isStacked?: boolean;
   showLegend?: boolean;
 };
@@ -24,6 +27,8 @@ export function BarChartComponent({
   chartData,
   xAxisDataKey,
   barColors,
+  barSize = 60,
+  yAxisRange = [0, 'auto'],
   isStacked = false,
   showLegend = false,
 }: BarChartProps) {
@@ -51,7 +56,7 @@ export function BarChartComponent({
         />
         <YAxis
           width="auto"
-          domain={[0, 'dataMax + 1']}
+          domain={yAxisRange}
           tick={false}
           tickLine={false}
           axisLine={{ stroke: 'var(--color-gray-700)' }}
@@ -97,7 +102,7 @@ export function BarChartComponent({
               dataKey={barKey}
               stackId={isStacked ? 'a' : undefined}
               fill={barColors[barKey]}
-              barSize={60}
+              barSize={barSize}
               radius={!isStacked ? 4 : 0}
               label={
                 isStacked && {

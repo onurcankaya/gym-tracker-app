@@ -42,7 +42,7 @@ export default function WorkoutOverview() {
   return (
     <Card className="w-full min-h-30 sm:min-h-20 max-h-fit py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-5">
-        <CardTitle className="text-sm sm:text-md">Workout Overview</CardTitle>
+        <CardTitle className="text-sm sm:text-md">Overview</CardTitle>
       </CardHeader>
 
       {runStatsError || weightTrainingStatsError ? (

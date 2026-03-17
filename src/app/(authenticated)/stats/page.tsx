@@ -1,19 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { startCase } from 'lodash';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import WorkoutOverview from '@/components/stats/WorkoutOverview';
-import WorkoutFrequency from '@/components/stats/charts/WorkoutFrequency';
-import WorkoutsOverTime from '@/components/stats/charts/WorkoutsOverTime';
+import WorkoutOverview from '@/components/stats/workout/WorkoutOverview';
+import WorkoutFrequency from '@/components/stats/workout/charts/WorkoutFrequency';
+import WorkoutsOverTime from '@/components/stats/workout/charts/WorkoutsOverTime';
 import RunOverview from '@/components/stats/run/Overview';
+import RunFrequency from '@/components/stats/run/charts/RunFrequency';
 import DistanceOverTime from '@/components/stats/run/charts/DistanceOverTime';
 import WeightTrainingOverview from '@/components/stats/weight-training/Overview';
+import WeightTrainingFrequency from '@/components/stats/weight-training/charts/WeightTrainingFrequency';
 import MuscleGroupsOverTime from '@/components/stats/weight-training/charts/MuscleGroupsOverTime';
 import { WorkoutType } from '@/api/types';
 
 export default function StatsPage() {
   const [tab, setTab] = useState(WorkoutType.ALL);
+
+  const title = useMemo(() => {
+    if (tab === WorkoutType.ALL) return 'Workout Stats';
+    return `${startCase(tab)} Stats`;
+  }, [tab]);
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 pt-[80px] pb-8 sm:pt-0">
@@ -26,7 +34,7 @@ export default function StatsPage() {
             <CardHeader className="px-3.5 sm:px-5 mb-0 sm:mb-1">
               <div className="flex items-center justify-between sm:flex-row">
                 <CardTitle className="hidden sm:block text-md">
-                  Workout Stats
+                  {title}
                 </CardTitle>
                 <CardTitle className="block sm:hidden text-md">Stats</CardTitle>
 
@@ -54,6 +62,7 @@ export default function StatsPage() {
                 className="space-y-4 sm:space-y-6"
               >
                 <RunOverview />
+                <RunFrequency />
                 <DistanceOverTime />
               </TabsContent>
               <TabsContent
@@ -61,6 +70,7 @@ export default function StatsPage() {
                 className="space-y-4 sm:space-y-6"
               >
                 <WeightTrainingOverview />
+                <WeightTrainingFrequency />
                 <MuscleGroupsOverTime />
               </TabsContent>
             </CardContent>
