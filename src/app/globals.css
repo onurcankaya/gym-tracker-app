@@ -190,6 +190,12 @@
     @apply bg-background text-foreground;
   }
 
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
   [data-slot='button'],
   [data-slot='tabs-trigger'],
   [data-slot='dialog-trigger'],
