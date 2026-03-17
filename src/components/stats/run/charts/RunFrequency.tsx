@@ -8,60 +8,48 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
-import { useWeightTrainings } from '@/hooks/useWeightTrainings';
+import { useRuns } from '@/hooks/useRuns';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
-import { muscleGroupColors } from '@/lib/colors';
-import { WeightTraining } from '@/api/types/weightTraining';
+import { workoutColors } from '@/lib/colors';
 
-export default function MuscleGroupsOverTime() {
-  const { data: weightTrainings, isLoading, error } = useWeightTrainings();
+export default function RunFrequency() {
+  const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
 
   const chartData = useMemo(() => {
-    if (!weightTrainings) return;
+    if (!runs) return;
 
-    const weightTrainingsAsc = sortByWorkoutDate(
-      weightTrainings,
-      'asc',
-    ) as WeightTraining[];
+    const runsAsc = sortByWorkoutDate(runs, 'asc');
 
     return (
-      weightTrainingsAsc.map((weightTraining) => {
-        const muscleGroups = weightTraining.muscle_groups.reduce(
-          (acc, muscleGroup) => {
-            acc[muscleGroup] = 1;
-            return acc;
-          },
-          {} as Record<string, number>,
-        );
-
+      runsAsc.map((run) => {
         return {
-          date: format(new Date(weightTraining.created_at), 'MMM d'),
-          ...muscleGroups,
+          date: format(new Date(run.created_at), 'MMM d'),
+          run: 1,
         };
       }) || []
     );
-  }, [weightTrainings]);
+  }, [runs]);
 
   return (
-    <Card className="w-full min-h-60 sm:min-h-80 py-4 sm:py-5">
+    <Card className="w-full min-h-70 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
-        <CardTitle className="text-sm sm:text-md">
-          Muscle Groups Over Time
-        </CardTitle>
+        <CardTitle className="text-sm sm:text-md">Run Frequency</CardTitle>
       </CardHeader>
 
       {error ? (
         <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           <p className="p-8 text-sm text-center text-red-500">
-            Error loading muscle groups over time chart
+            Error loading run frequency chart
           </p>
           <Button
             variant="outline"
             size="sm"
             onClick={() => {
-              queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
+              queryClient.invalidateQueries({
+                queryKey: ['runs'],
+              });
             }}
           >
             <RetryIcon />
@@ -69,15 +57,18 @@ export default function MuscleGroupsOverTime() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-2">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-4">
           {isLoading ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
             <BarChart
               chartData={chartData}
-              barColors={muscleGroupColors}
               xAxisDataKey="date"
-              isStacked={true}
+              barSize={30}
+              barColors={{
+                run: workoutColors['run'],
+              }}
+              height={180}
             />
           )}
         </CardContent>

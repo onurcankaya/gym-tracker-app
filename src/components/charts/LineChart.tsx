@@ -36,26 +36,26 @@ export function LineChartComponent({
         data={chartData}
         margin={{
           top: 20,
-          right: 10,
-          left: 10,
+          right: 15,
+          left: 15,
           bottom: 0,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-700)" />
+        <CartesianGrid vertical={false} stroke="var(--color-gray-800)" />
         <XAxis
           dataKey={xAxisDataKey}
           interval="preserveStartEnd"
           tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dy: 4 }}
           tickLine={false}
-          axisLine={{ stroke: 'var(--color-gray-700)' }}
+          axisLine={{ stroke: 'var(--color-gray-800)' }}
         />
         <YAxis
           width="auto"
           unit={yAxisUnit}
           domain={yAxisRange}
-          tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dx: -4, dy: -4 }}
+          tick={{ fill: 'var(--color-gray-400)', fontSize: 12, dx: -6, dy: -4 }}
           tickLine={false}
-          axisLine={{ stroke: 'var(--color-gray-700)' }}
+          axisLine={false}
         />
         <Tooltip
           contentStyle={{

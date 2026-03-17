@@ -10,22 +10,29 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import { AxisDomain } from 'recharts/types/util/types';
 import { capitalize } from 'lodash';
 
 type BarChartProps = {
   chartData: Record<string, string | number>[] | undefined;
   xAxisDataKey: string;
+  yAxisRange?: AxisDomain;
   barColors: Record<string, string>;
+  barSize?: number;
   isStacked?: boolean;
   showLegend?: boolean;
+  height?: number;
 };
 
 export function BarChartComponent({
   chartData,
   xAxisDataKey,
   barColors,
+  barSize = 60,
+  yAxisRange = [0, 'auto'],
   isStacked = false,
   showLegend = false,
+  height = 240,
 }: BarChartProps) {
   const barData = Array.from(
     new Set(
@@ -36,12 +43,17 @@ export function BarChartComponent({
   );
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={height}>
       <BarChart
         data={chartData}
-        margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
+        margin={{ top: 5, right: 20, left: 20, bottom: 0 }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-700)" />
+        <CartesianGrid
+          vertical={false}
+          horizontal={false}
+          strokeDasharray="3 3"
+          stroke="var(--color-gray-700)"
+        />
         <XAxis
           dataKey={xAxisDataKey}
           interval="preserveStartEnd"
@@ -51,7 +63,7 @@ export function BarChartComponent({
         />
         <YAxis
           width="auto"
-          domain={[0, 'dataMax + 1']}
+          domain={yAxisRange}
           tick={false}
           tickLine={false}
           axisLine={{ stroke: 'var(--color-gray-700)' }}
@@ -97,7 +109,7 @@ export function BarChartComponent({
               dataKey={barKey}
               stackId={isStacked ? 'a' : undefined}
               fill={barColors[barKey]}
-              barSize={60}
+              barSize={barSize}
               radius={!isStacked ? 4 : 0}
               label={
                 isStacked && {

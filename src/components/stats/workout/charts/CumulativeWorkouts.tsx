@@ -7,14 +7,14 @@ import { RotateCcw as RetryIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
-import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
+import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 import { Workout, WorkoutType } from '@/api/types';
 
-export default function WorkoutFrequency() {
+export default function CumulativeWorkouts() {
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,
@@ -36,38 +36,45 @@ export default function WorkoutFrequency() {
     ] as Workout[];
     const workoutsAsc = sortByWorkoutDate(workouts, 'asc');
 
-    return (
-      workoutsAsc.map((workout) => {
-        let runCount = 0;
-        let weightTrainingCount = 0;
+    let runCount = 0;
+    let weightTrainingCount = 0;
+    const cumulativeWorkoutData = [];
 
-        if (workout.type === WorkoutType.RUN) {
-          runCount++;
-        }
-
-        if (workout.type === WorkoutType.WEIGHT_TRAINING) {
-          weightTrainingCount++;
-        }
-
-        return {
+    for (let workout of workoutsAsc) {
+      if (workout.type === WorkoutType.RUN) {
+        runCount++;
+        cumulativeWorkoutData.push({
           date: format(new Date(workout.created_at), 'MMM d'),
           run: runCount,
           'weight training': weightTrainingCount,
-        };
-      }) || []
-    );
+        });
+      }
+
+      if (workout.type === WorkoutType.WEIGHT_TRAINING) {
+        weightTrainingCount++;
+        cumulativeWorkoutData.push({
+          date: format(new Date(workout.created_at), 'MMM d'),
+          run: runCount,
+          'weight training': weightTrainingCount,
+        });
+      }
+    }
+
+    return cumulativeWorkoutData;
   }, [runs, weightTrainings]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
-        <CardTitle className="text-sm sm:text-md">Workout Frequency</CardTitle>
+        <CardTitle className="text-sm sm:text-md">
+          Cumulative Workouts
+        </CardTitle>
       </CardHeader>
 
       {errorRuns || errorWeightTrainings ? (
         <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           <p className="p-8 text-sm text-center text-red-500">
-            Error loading workouts frequency chart
+            Error loading cumulative workouts chart
           </p>
           <Button
             variant="outline"
@@ -87,13 +94,17 @@ export default function WorkoutFrequency() {
           {isLoadingRuns || isLoadingWeightTrainings ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
-            <BarChart
+            <LineChart
               chartData={chartData}
+              lineData={[
+                { key: 'run', color: workoutColors['run'] },
+                {
+                  key: 'weight training',
+                  color: workoutColors['weight training'],
+                },
+              ]}
               xAxisDataKey="date"
-              barColors={{
-                run: workoutColors['run'],
-                'weight training': workoutColors['weight training'],
-              }}
+              yAxisRange={[0, 'dataMax']}
               showLegend={true}
             />
           )}

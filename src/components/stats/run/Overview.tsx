@@ -16,7 +16,7 @@ export default function RunOverview() {
   return (
     <Card className="w-full min-h-55 sm:min-h-60 max-h-fit py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-5">
-        <CardTitle className="text-sm sm:text-md">Run Overview</CardTitle>
+        <CardTitle className="text-sm sm:text-md">Overview</CardTitle>
       </CardHeader>
 
       {error ? (

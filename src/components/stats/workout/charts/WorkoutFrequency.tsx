@@ -7,14 +7,14 @@ import { RotateCcw as RetryIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
-import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 import { Workout, WorkoutType } from '@/api/types';
 
-export default function WorkoutsOverTime() {
+export default function WorkoutFrequency() {
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,
@@ -36,45 +36,38 @@ export default function WorkoutsOverTime() {
     ] as Workout[];
     const workoutsAsc = sortByWorkoutDate(workouts, 'asc');
 
-    let runCount = 0;
-    let weightTrainingCount = 0;
-    const workoutsOverTime = [];
+    return (
+      workoutsAsc.map((workout) => {
+        let runCount = 0;
+        let weightTrainingCount = 0;
 
-    for (let workout of workoutsAsc) {
-      if (workout.type === WorkoutType.RUN) {
-        runCount++;
-        workoutsOverTime.push({
+        if (workout.type === WorkoutType.RUN) {
+          runCount++;
+        }
+
+        if (workout.type === WorkoutType.WEIGHT_TRAINING) {
+          weightTrainingCount++;
+        }
+
+        return {
           date: format(new Date(workout.created_at), 'MMM d'),
           run: runCount,
           'weight training': weightTrainingCount,
-        });
-      }
-
-      if (workout.type === WorkoutType.WEIGHT_TRAINING) {
-        weightTrainingCount++;
-        workoutsOverTime.push({
-          date: format(new Date(workout.created_at), 'MMM d'),
-          run: runCount,
-          'weight training': weightTrainingCount,
-        });
-      }
-    }
-
-    return workoutsOverTime;
+        };
+      }) || []
+    );
   }, [runs, weightTrainings]);
 
   return (
-    <Card className="w-full min-h-80 py-4 sm:py-5">
+    <Card className="w-full min-h-70 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
-        <CardTitle className="text-sm sm:text-md">
-          Total Workouts Over Time
-        </CardTitle>
+        <CardTitle className="text-sm sm:text-md">Workout Frequency</CardTitle>
       </CardHeader>
 
       {errorRuns || errorWeightTrainings ? (
         <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           <p className="p-8 text-sm text-center text-red-500">
-            Error loading workouts over time chart
+            Error loading workouts frequency chart
           </p>
           <Button
             variant="outline"
@@ -90,22 +83,19 @@ export default function WorkoutsOverTime() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-4">
           {isLoadingRuns || isLoadingWeightTrainings ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
-            <LineChart
+            <BarChart
               chartData={chartData}
-              lineData={[
-                { key: 'run', color: workoutColors['run'] },
-                {
-                  key: 'weight training',
-                  color: workoutColors['weight training'],
-                },
-              ]}
               xAxisDataKey="date"
-              yAxisRange={[0, 'dataMax']}
+              barColors={{
+                run: workoutColors['run'],
+                'weight training': workoutColors['weight training'],
+              }}
               showLegend={true}
+              height={180}
             />
           )}
         </CardContent>
