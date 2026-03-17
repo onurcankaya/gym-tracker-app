@@ -33,7 +33,7 @@ export default function WeightTrainingFrequency() {
   }, [weightTrainings]);
 
   return (
-    <Card className="w-full min-h-80 py-4 sm:py-5">
+    <Card className="w-full min-h-70 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">
           Weight Training Frequency
@@ -50,7 +50,7 @@ export default function WeightTrainingFrequency() {
             size="sm"
             onClick={() => {
               queryClient.invalidateQueries({
-                queryKey: ['runs', 'weightTrainings'],
+                queryKey: ['weightTrainings'],
               });
             }}
           >
@@ -59,7 +59,7 @@ export default function WeightTrainingFrequency() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-4">
           {isLoading ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
@@ -70,7 +70,7 @@ export default function WeightTrainingFrequency() {
               barColors={{
                 'weight training': workoutColors['weight training'],
               }}
-              showLegend={true}
+              height={180}
             />
           )}
         </CardContent>

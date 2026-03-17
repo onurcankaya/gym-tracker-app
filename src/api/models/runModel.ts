@@ -8,7 +8,10 @@ export class RunModel {
       [userId],
     );
 
-    return result.rows;
+    return result.rows.map((row) => ({
+      ...row,
+      distance: parseFloat(row.distance),
+    }));
   }
 
   static async create(userId: string, data: CreateRunDTO): Promise<Run> {

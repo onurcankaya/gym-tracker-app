@@ -21,6 +21,7 @@ type BarChartProps = {
   barSize?: number;
   isStacked?: boolean;
   showLegend?: boolean;
+  height?: number;
 };
 
 export function BarChartComponent({
@@ -31,6 +32,7 @@ export function BarChartComponent({
   yAxisRange = [0, 'auto'],
   isStacked = false,
   showLegend = false,
+  height = 240,
 }: BarChartProps) {
   const barData = Array.from(
     new Set(
@@ -41,12 +43,17 @@ export function BarChartComponent({
   );
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={height}>
       <BarChart
         data={chartData}
-        margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
+        margin={{ top: 5, right: 20, left: 20, bottom: 0 }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-700)" />
+        <CartesianGrid
+          vertical={false}
+          horizontal={false}
+          strokeDasharray="3 3"
+          stroke="var(--color-gray-700)"
+        />
         <XAxis
           dataKey={xAxisDataKey}
           interval="preserveStartEnd"

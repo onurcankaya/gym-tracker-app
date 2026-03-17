@@ -59,7 +59,7 @@ export default function WorkoutFrequency() {
   }, [runs, weightTrainings]);
 
   return (
-    <Card className="w-full min-h-80 py-4 sm:py-5">
+    <Card className="w-full min-h-70 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">Workout Frequency</CardTitle>
       </CardHeader>
@@ -83,7 +83,7 @@ export default function WorkoutFrequency() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-4">
           {isLoadingRuns || isLoadingWeightTrainings ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
@@ -95,6 +95,7 @@ export default function WorkoutFrequency() {
                 'weight training': workoutColors['weight training'],
               }}
               showLegend={true}
+              height={180}
             />
           )}
         </CardContent>

@@ -14,7 +14,7 @@ import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 import { Workout, WorkoutType } from '@/api/types';
 
-export default function WorkoutsOverTime() {
+export default function CumulativeWorkouts() {
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,
@@ -38,12 +38,12 @@ export default function WorkoutsOverTime() {
 
     let runCount = 0;
     let weightTrainingCount = 0;
-    const workoutsOverTime = [];
+    const cumulativeWorkoutData = [];
 
     for (let workout of workoutsAsc) {
       if (workout.type === WorkoutType.RUN) {
         runCount++;
-        workoutsOverTime.push({
+        cumulativeWorkoutData.push({
           date: format(new Date(workout.created_at), 'MMM d'),
           run: runCount,
           'weight training': weightTrainingCount,
@@ -52,7 +52,7 @@ export default function WorkoutsOverTime() {
 
       if (workout.type === WorkoutType.WEIGHT_TRAINING) {
         weightTrainingCount++;
-        workoutsOverTime.push({
+        cumulativeWorkoutData.push({
           date: format(new Date(workout.created_at), 'MMM d'),
           run: runCount,
           'weight training': weightTrainingCount,
@@ -60,21 +60,21 @@ export default function WorkoutsOverTime() {
       }
     }
 
-    return workoutsOverTime;
+    return cumulativeWorkoutData;
   }, [runs, weightTrainings]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">
-          Total Workouts Over Time
+          Cumulative Workouts
         </CardTitle>
       </CardHeader>
 
       {errorRuns || errorWeightTrainings ? (
         <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           <p className="p-8 text-sm text-center text-red-500">
-            Error loading workouts over time chart
+            Error loading cumulative workouts chart
           </p>
           <Button
             variant="outline"
