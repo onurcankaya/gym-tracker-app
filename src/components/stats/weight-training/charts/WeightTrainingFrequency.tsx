@@ -33,7 +33,7 @@ export default function WeightTrainingFrequency() {
   }, [weightTrainings]);
 
   return (
-    <Card className="w-full min-h-70 py-4 sm:py-5">
+    <Card className="w-full min-h-75 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">
           Weight Training Frequency

@@ -206,7 +206,7 @@
   }
 
   [data-slot='card'] {
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
   }
 
   [data-slot='tabs-list'] {
@@ -257,4 +257,53 @@
       background-color: var(--color-neon-green-300) !important;
     }
   }
+
+  [data-slot='activity-calendar-card'] {
+    gap: 0.5rem !important;
+  }
+
+  [data-slot='activity-calendar'] {
+    padding: 0.5rem 0 !important;
+    nav {
+      height: 24px !important;
+      @media (min-width: 768px) {
+        padding: 0.5rem !important;
+      }
+      button {
+        height: 24px !important;
+      }
+    }
+    .rdp-month {
+      gap: 1rem !important;
+      .rdp-month_caption {
+        height: 24px !important;
+      }
+    }
+    [role='status'] {
+      font-size: 12px !important;
+    }
+    [role='gridcell'] {
+      height: 32px !important;
+      font-size: 12px !important;
+      button {
+        width: 32px !important;
+        height: 32px !important;
+      }
+    }
+    [role='gridcell'][data-today='true'] {
+      height: 32px !important;
+      width: 32px !important;
+      margin: 0 0.25rem !important;
+      @media (min-width: 640px) {
+        margin: 0 0.5rem !important;
+      }
+      @media (min-width: 768px) {
+        margin: 0 0.75rem !important;
+      }
+    }
+  }
+}
+
+.recharts-legend-wrapper {
+  bottom: -5px !important;
 }

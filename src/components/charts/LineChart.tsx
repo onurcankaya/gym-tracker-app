@@ -20,6 +20,7 @@ type LineChartComponentProps = {
   yAxisUnit?: string;
   yAxisRange?: AxisDomain;
   showLegend?: boolean;
+  height?: number;
 };
 
 export function LineChartComponent({
@@ -29,9 +30,10 @@ export function LineChartComponent({
   yAxisUnit = '',
   yAxisRange = [0, 'auto'],
   showLegend = false,
+  height = 240,
 }: LineChartComponentProps) {
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={height}>
       <LineChart
         data={chartData}
         margin={{

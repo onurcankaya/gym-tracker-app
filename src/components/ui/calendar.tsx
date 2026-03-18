@@ -21,10 +21,12 @@ function Calendar({
   showOutsideDays = true,
   captionLayout = 'label',
   buttonVariant = 'ghost',
+  dataSlot = 'calendar',
   formatters,
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
+  dataSlot?: string;
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 }) {
   const defaultClassNames = getDefaultClassNames();
@@ -135,7 +137,7 @@ function Calendar({
         Root: ({ className, rootRef, ...props }) => {
           return (
             <div
-              data-slot="calendar"
+              data-slot={dataSlot}
               ref={rootRef}
               className={cn(className)}
               {...props}
