@@ -83,7 +83,7 @@ export default function WorkoutFrequency() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
           {isLoadingRuns || isLoadingWeightTrainings ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (

@@ -64,7 +64,7 @@ export default function CumulativeWorkouts() {
   }, [runs, weightTrainings]);
 
   return (
-    <Card className="w-full min-h-80 py-4 sm:py-5">
+    <Card className="w-full min-h-85 py-4 sm:py-5">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle className="text-sm sm:text-md">
           Cumulative Workouts
@@ -106,6 +106,7 @@ export default function CumulativeWorkouts() {
               xAxisDataKey="date"
               yAxisRange={[0, 'dataMax']}
               showLegend={true}
+              height={240}
             />
           )}
         </CardContent>
