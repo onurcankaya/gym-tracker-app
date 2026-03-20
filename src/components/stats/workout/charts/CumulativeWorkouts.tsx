@@ -8,13 +8,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 import { Workout, WorkoutType } from '@/api/types';
 
 export default function CumulativeWorkouts() {
+  const { dateRange } = useStats();
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,
@@ -34,13 +39,18 @@ export default function CumulativeWorkouts() {
         type: WorkoutType.WEIGHT_TRAINING,
       })),
     ] as Workout[];
+
     const workoutsAsc = sortByWorkoutDate(workouts, 'asc');
+    const workoutsWithinDateRange = filterWorkoutsByDateRange(
+      workoutsAsc,
+      dateRange,
+    );
 
     let runCount = 0;
     let weightTrainingCount = 0;
     const cumulativeWorkoutData = [];
 
-    for (let workout of workoutsAsc) {
+    for (let workout of workoutsWithinDateRange) {
       if (workout.type === WorkoutType.RUN) {
         runCount++;
         cumulativeWorkoutData.push({
@@ -61,7 +71,7 @@ export default function CumulativeWorkouts() {
     }
 
     return cumulativeWorkoutData;
-  }, [runs, weightTrainings]);
+  }, [runs, weightTrainings, dateRange]);
 
   return (
     <Card className="w-full min-h-85 py-4 sm:py-5">

@@ -132,7 +132,7 @@ export default function WorkoutForm() {
           <DialogTitle>Log {workoutType}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <Tabs
             value={workoutType}
             onValueChange={(value) => setWorkoutType(value as WorkoutType)}

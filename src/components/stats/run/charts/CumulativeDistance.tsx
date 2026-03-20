@@ -8,12 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 import { Run } from '@/api/types/run';
 
 export default function CumulativeDistance() {
+  const { dateRange } = useStats();
   const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
@@ -22,11 +27,15 @@ export default function CumulativeDistance() {
     if (!runs) return;
 
     const runsAsc = sortByWorkoutDate(runs, 'asc') as Run[];
+    const runsWithinDateRange = filterWorkoutsByDateRange(
+      runsAsc,
+      dateRange,
+    ) as Run[];
 
     let cumulativeDistance = 0;
     const cumulativeDistanceData = [];
 
-    for (let run of runsAsc) {
+    for (let run of runsWithinDateRange) {
       cumulativeDistance += run.distance;
       cumulativeDistanceData.push({
         date: format(new Date(run.created_at), 'MMM d'),
@@ -35,7 +44,7 @@ export default function CumulativeDistance() {
     }
 
     return cumulativeDistanceData;
-  }, [runs]);
+  }, [runs, dateRange]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">

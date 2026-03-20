@@ -1,3 +1,6 @@
+import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import { DATE_FORMAT } from '@/lib/dateUtils';
 import {
   WeightTraining,
   CreateWeightTrainingDTO,
@@ -56,8 +59,15 @@ export const weightTrainingClient = {
     return response.json();
   },
 
-  getStats: async (): Promise<WeightTrainingStats> => {
-    const response = await fetch(WEIGHT_TRAININGS_STATS_URL);
+  getStats: async (dateRange: DateRange): Promise<WeightTrainingStats> => {
+    const fromDate = format(dateRange.from!, DATE_FORMAT.DATE_STRING);
+    const toDate = format(dateRange.to!, DATE_FORMAT.DATE_STRING);
+
+    if (!fromDate && !toDate) throw new Error('Invalid date range');
+
+    const url = `${WEIGHT_TRAININGS_STATS_URL}?fromDate=${fromDate}&toDate=${toDate}`;
+
+    const response = await fetch(url);
 
     if (!response.ok) throw new Error('Failed to fetch weight training stats');
 

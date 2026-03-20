@@ -8,12 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { muscleGroupColors } from '@/lib/colors';
 import { WeightTraining } from '@/api/types/weightTraining';
 
 export default function MuscleGroupsOverTime() {
+  const { dateRange } = useStats();
   const { data: weightTrainings, isLoading, error } = useWeightTrainings();
 
   const queryClient = useQueryClient();
@@ -26,8 +31,13 @@ export default function MuscleGroupsOverTime() {
       'asc',
     ) as WeightTraining[];
 
+    const weightTrainingsWithinDateRange = filterWorkoutsByDateRange(
+      weightTrainingsAsc,
+      dateRange,
+    ) as WeightTraining[];
+
     return (
-      weightTrainingsAsc.map((weightTraining) => {
+      weightTrainingsWithinDateRange.map((weightTraining) => {
         const muscleGroups = weightTraining.muscle_groups.reduce(
           (acc, muscleGroup) => {
             acc[muscleGroup] = 1;
@@ -42,7 +52,7 @@ export default function MuscleGroupsOverTime() {
         };
       }) || []
     );
-  }, [weightTrainings]);
+  }, [weightTrainings, dateRange]);
 
   return (
     <Card className="w-full min-h-60 sm:min-h-80 py-4 sm:py-5">

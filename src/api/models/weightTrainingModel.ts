@@ -5,7 +5,7 @@ import {
   UpdateWeightTrainingDTO,
   WeightTrainingStats,
 } from '@/api/types/weightTraining';
-
+import { DateRange } from '@/api/types/dateRange';
 export class WeightTrainingModel {
   static async findAll(userId: string): Promise<WeightTraining[]> {
     const result = await pool.query(
@@ -92,17 +92,26 @@ export class WeightTrainingModel {
     return result.rows[0];
   }
 
-  static async getStats(userId: string): Promise<WeightTrainingStats> {
-    const result = await pool.query(
-      `SELECT
+  static async getStats(
+    userId: string,
+    dateRange: DateRange,
+  ): Promise<WeightTrainingStats> {
+    let query = `SELECT
         COUNT(*) as total_workouts,
         COALESCE(SUM(duration_minutes), 0) as total_time,
         COALESCE(AVG(duration_minutes), 0) as avg_duration
         FROM weight_trainings
         WHERE user_id = $1
-      `,
-      [userId],
-    );
+      `;
+
+    const params = [userId];
+
+    if (dateRange.from && dateRange.to) {
+      query += ` AND created_at >= $2 AND created_at <= $3`;
+      params.push(dateRange.from, dateRange.to);
+    }
+
+    const result = await pool.query(query, params);
 
     return result.rows[0];
   }

@@ -7,15 +7,13 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { WorkoutType } from '@/api/types';
 
-type ActivityCalendarProps = {
-  variant: WorkoutType;
-};
-
-export default function ActivityCalendar({ variant }: ActivityCalendarProps) {
+export default function ActivityCalendar() {
+  const { tab: variant } = useStats();
   const { data: runs, isLoading: isLoadingRuns, error: errorRuns } = useRuns();
   const {
     data: weightTrainings,

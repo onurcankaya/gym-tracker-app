@@ -8,11 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 
 export default function RunFrequency() {
+  const { dateRange } = useStats();
   const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
@@ -21,16 +26,17 @@ export default function RunFrequency() {
     if (!runs) return;
 
     const runsAsc = sortByWorkoutDate(runs, 'asc');
+    const runsWithinDateRange = filterWorkoutsByDateRange(runsAsc, dateRange);
 
     return (
-      runsAsc.map((run) => {
+      runsWithinDateRange.map((run) => {
         return {
           date: format(new Date(run.created_at), 'MMM d'),
           run: 1,
         };
       }) || []
     );
-  }, [runs]);
+  }, [runs, dateRange]);
 
   return (
     <Card className="w-full min-h-75 py-4 sm:py-5">

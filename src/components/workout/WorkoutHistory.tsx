@@ -18,11 +18,14 @@ import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
 import { formatFullDate } from '@/lib/dateUtils';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { WorkoutType, Workout } from '@/api/types';
 
 export default function WorkoutHistory() {
-  const [activeTab, setActiveTab] = useState(WorkoutType.ALL);
+  const [activeTab, setActiveTab] = useState<WorkoutType>(WorkoutType.ALL);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateRange, setDateRange] = useState<DateRange>();
 
@@ -45,15 +48,7 @@ export default function WorkoutHistory() {
     ] as Workout[];
 
     if (dateRange && dateRange.from && dateRange.to) {
-      return items.filter((workout) => {
-        const workoutDate = new Date(workout.created_at).getTime();
-        const dateRangeFrom = dateRange.from
-          ? new Date(dateRange.from).getTime()
-          : 0;
-        const dateRangeTo = dateRange.to ? new Date(dateRange.to).getTime() : 0;
-
-        return workoutDate >= dateRangeFrom && workoutDate <= dateRangeTo;
-      });
+      return filterWorkoutsByDateRange(items);
     }
 
     if (

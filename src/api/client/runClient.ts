@@ -1,3 +1,6 @@
+import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import { DATE_FORMAT } from '@/lib/dateUtils';
 import { Run, CreateRunDTO, UpdateRunDTO, RunStats } from '@/api/types/run';
 
 const BASE_URL = '/api';
@@ -51,8 +54,15 @@ export const runClient = {
     return response.json();
   },
 
-  getStats: async (): Promise<RunStats> => {
-    const response = await fetch(RUN_STATS_URL);
+  getStats: async (dateRange: DateRange): Promise<RunStats> => {
+    const fromDate = format(dateRange.from!, DATE_FORMAT.DATE_STRING);
+    const toDate = format(dateRange.to!, DATE_FORMAT.DATE_STRING);
+
+    if (!fromDate && !toDate) throw new Error('Invalid date range');
+
+    const url = `${RUN_STATS_URL}?fromDate=${fromDate}&toDate=${toDate}`;
+
+    const response = await fetch(url);
 
     if (!response.ok) throw new Error('Failed to fetch run stats');
 

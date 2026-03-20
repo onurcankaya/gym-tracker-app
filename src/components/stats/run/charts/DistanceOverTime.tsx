@@ -8,11 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { Run } from '@/api/types/run';
 
 export default function DistanceOverTime() {
+  const { dateRange } = useStats();
   const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
@@ -21,14 +26,18 @@ export default function DistanceOverTime() {
     if (!runs) return;
 
     const runsAsc = sortByWorkoutDate(runs, 'asc') as Run[];
+    const runsWithinDateRange = filterWorkoutsByDateRange(
+      runsAsc,
+      dateRange,
+    ) as Run[];
 
     return (
-      runsAsc.map((run) => ({
+      runsWithinDateRange.map((run) => ({
         date: format(new Date(run.created_at), 'MMM d'),
         distance: run.distance,
       })) || []
     );
-  }, [runs]);
+  }, [runs, dateRange]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">

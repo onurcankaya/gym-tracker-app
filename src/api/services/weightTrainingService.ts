@@ -5,6 +5,7 @@ import {
   UpdateWeightTrainingDTO,
   WeightTrainingStats,
 } from '@/api/types/weightTraining';
+import { DateRange } from '@/api/types/dateRange';
 
 export class WeightTrainingService {
   static async getAllWeightTrainings(
@@ -58,7 +59,10 @@ export class WeightTrainingService {
     return WeightTrainingModel.update(userId, weightTrainingId, data);
   }
 
-  static async getStats(userId: string): Promise<WeightTrainingStats> {
-    return WeightTrainingModel.getStats(userId);
+  static async getStats(
+    userId: string,
+    dateRange: DateRange,
+  ): Promise<WeightTrainingStats> {
+    return WeightTrainingModel.getStats(userId, dateRange);
   }
 }

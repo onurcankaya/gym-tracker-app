@@ -9,7 +9,7 @@ export type Run = {
   distance_unit: DistanceUnit;
   duration_minutes: number;
   notes: string | null;
-  created_at: Date;
+  created_at: string;
 };
 
 export type CreateRunDTO = {

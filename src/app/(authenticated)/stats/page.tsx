@@ -1,31 +1,16 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { startCase } from 'lodash';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import ActivityCalendar from '@/components/stats/ActivityCalendar';
-import WorkoutOverview from '@/components/stats/workout/WorkoutOverview';
-import WorkoutFrequency from '@/components/stats/workout/charts/WorkoutFrequency';
-import CumulativeWorkouts from '@/components/stats/workout/charts/CumulativeWorkouts';
-import RunOverview from '@/components/stats/run/Overview';
-import RunFrequency from '@/components/stats/run/charts/RunFrequency';
-import DistanceOverTime from '@/components/stats/run/charts/DistanceOverTime';
-import CumulativeRuns from '@/components/stats/run/charts/CumulativeRuns';
-import CumulativeDistance from '@/components/stats/run/charts/CumulativeDistance';
-import WeightTrainingOverview from '@/components/stats/weight-training/Overview';
-import WeightTrainingFrequency from '@/components/stats/weight-training/charts/WeightTrainingFrequency';
-import CumulativeWeightTrainingSessions from '@/components/stats/weight-training/charts/CumulativeWeightTrainingSessions';
-import MuscleGroupsOverTime from '@/components/stats/weight-training/charts/MuscleGroupsOverTime';
+import { StatsProvider, useStats } from '@/contexts/StatsContext';
+import StatsToolbar from '@/components/stats/StatsToolbar';
+import WorkoutStats from '@/components/stats/workout/WorkoutStats';
+import RunStats from '@/components/stats/run/RunStats';
+import WeightTrainingStats from '@/components/stats/weight-training/WeightTrainingStats';
 import { WorkoutType } from '@/api/types';
 
-export default function StatsPage() {
-  const [tab, setTab] = useState(WorkoutType.ALL);
-
-  const title = useMemo(() => {
-    if (tab === WorkoutType.ALL) return 'Workout Stats';
-    return `${startCase(tab)} Stats`;
-  }, [tab]);
+function StatsPageContent() {
+  const { title, tab, setTab, dateRange, dateRangeLabel } = useStats();
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 pt-[80px]">
@@ -34,59 +19,65 @@ export default function StatsPage() {
           <Tabs
             value={tab}
             onValueChange={(value) => setTab(value as WorkoutType)}
+            className="gap-4"
           >
-            <CardHeader className="px-3.5 sm:px-5 mb-0 sm:mb-1">
+            <CardHeader className="px-3.5 sm:px-5 h-[24px]">
               <div className="flex items-center justify-between sm:flex-row">
-                <CardTitle className="hidden sm:block text-md">
-                  {title}
-                </CardTitle>
-                <CardTitle className="block sm:hidden text-md">Stats</CardTitle>
-
-                <TabsList className="gap-2 sm:w-auto sm:my-0">
-                  <TabsTrigger value={WorkoutType.ALL}>All</TabsTrigger>
-                  <TabsTrigger value={WorkoutType.RUN}>Runs</TabsTrigger>
-                  <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
-                    Weight Training
-                  </TabsTrigger>
-                </TabsList>
+                <CardTitle className="text-md">{title}</CardTitle>
               </div>
             </CardHeader>
+
+            <CardContent className="space-y-4 px-2 sm:px-4">
+              <TabsList className="w-full gap-2">
+                <TabsTrigger value={WorkoutType.ALL}>All</TabsTrigger>
+                <TabsTrigger value={WorkoutType.RUN}>Runs</TabsTrigger>
+                <TabsTrigger value={WorkoutType.WEIGHT_TRAINING}>
+                  Weight Training
+                </TabsTrigger>
+              </TabsList>
+
+              <StatsToolbar />
+
+              {dateRange?.from && (
+                <div className="flex items-center justify-center">
+                  <p className="text-xs md:text-sm text-center text-neon-green-300">
+                    {dateRangeLabel}
+                  </p>
+                </div>
+              )}
+            </CardContent>
 
             <CardContent className="px-2 sm:px-4">
               <TabsContent
                 value={WorkoutType.ALL}
                 className="space-y-4 sm:space-y-6"
               >
-                <WorkoutOverview />
-                <ActivityCalendar variant={tab} />
-                <WorkoutFrequency />
-                <CumulativeWorkouts />
+                <WorkoutStats />
               </TabsContent>
               <TabsContent
                 value={WorkoutType.RUN}
                 className="space-y-4 sm:space-y-6"
               >
-                <RunOverview />
-                <ActivityCalendar variant={tab} />
-                <RunFrequency />
-                <DistanceOverTime />
-                <CumulativeRuns />
-                <CumulativeDistance />
+                <RunStats />
               </TabsContent>
               <TabsContent
                 value={WorkoutType.WEIGHT_TRAINING}
                 className="space-y-4 sm:space-y-6"
               >
-                <WeightTrainingOverview />
-                <ActivityCalendar variant={tab} />
-                <WeightTrainingFrequency />
-                <MuscleGroupsOverTime />
-                <CumulativeWeightTrainingSessions />
+                <WeightTrainingStats />
               </TabsContent>
             </CardContent>
           </Tabs>
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function StatsPage() {
+  return (
+    <StatsProvider>
+      <StatsPageContent />
+    </StatsProvider>
   );
 }

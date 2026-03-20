@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { weightTrainingClient } from '@/api/client/weightTrainingClient';
 import { toast } from 'sonner';
+import { DateRange } from 'react-day-picker';
 
 export function useWeightTrainings() {
   return useQuery({
@@ -54,9 +55,9 @@ export function useUpdateWeightTraining() {
   });
 }
 
-export function useWeightTrainingStats() {
+export function useWeightTrainingStats(dateRange: DateRange) {
   return useQuery({
-    queryKey: ['weightTrainingStats'],
-    queryFn: weightTrainingClient.getStats,
+    queryKey: ['weightTrainingStats', dateRange],
+    queryFn: () => weightTrainingClient.getStats(dateRange),
   });
 }
