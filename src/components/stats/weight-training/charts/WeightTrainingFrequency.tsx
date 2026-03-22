@@ -8,11 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { BarChartComponent as BarChart } from '@/components/charts/BarChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 
 export default function WeightTrainingFrequency() {
+  const { dateRange } = useStats();
   const { data: weightTrainings, isLoading, error } = useWeightTrainings();
 
   const queryClient = useQueryClient();
@@ -21,16 +26,20 @@ export default function WeightTrainingFrequency() {
     if (!weightTrainings) return;
 
     const weightTrainingsAsc = sortByWorkoutDate(weightTrainings, 'asc');
+    const weightTrainingsWithinDateRange = filterWorkoutsByDateRange(
+      weightTrainingsAsc,
+      dateRange,
+    );
 
     return (
-      weightTrainingsAsc.map((weightTraining) => {
+      weightTrainingsWithinDateRange.map((weightTraining) => {
         return {
           date: format(new Date(weightTraining.created_at), 'MMM d'),
           'weight training': 1,
         };
       }) || []
     );
-  }, [weightTrainings]);
+  }, [weightTrainings, dateRange]);
 
   return (
     <Card className="w-full min-h-75 py-4 sm:py-5">

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { runClient } from '@/api/client/runClient';
 import { toast } from 'sonner';
+import { DateRange } from 'react-day-picker';
+import { runClient } from '@/api/client/runClient';
 
 export function useRuns() {
   return useQuery({
@@ -54,9 +55,9 @@ export function useUpdateRun() {
   });
 }
 
-export function useRunStats() {
+export function useRunStats(dateRange: DateRange) {
   return useQuery({
-    queryKey: ['runStats'],
-    queryFn: runClient.getStats,
+    queryKey: ['runStats', dateRange],
+    queryFn: () => runClient.getStats(dateRange),
   });
 }

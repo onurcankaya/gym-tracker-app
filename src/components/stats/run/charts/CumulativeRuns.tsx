@@ -8,11 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useRuns } from '@/hooks/useRuns';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 
 export default function CumulativeRuns() {
+  const { dateRange } = useStats();
   const { data: runs, isLoading, error } = useRuns();
 
   const queryClient = useQueryClient();
@@ -21,11 +26,12 @@ export default function CumulativeRuns() {
     if (!runs) return;
 
     const runsAsc = sortByWorkoutDate(runs, 'asc');
+    const runsWithinDateRange = filterWorkoutsByDateRange(runsAsc, dateRange);
 
     let runCount = 0;
     const cumulativeRunData = [];
 
-    for (let run of runsAsc) {
+    for (let run of runsWithinDateRange) {
       runCount++;
       cumulativeRunData.push({
         date: format(new Date(run.created_at), 'MMM d'),
@@ -34,7 +40,7 @@ export default function CumulativeRuns() {
     }
 
     return cumulativeRunData;
-  }, [runs]);
+  }, [runs, dateRange]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">

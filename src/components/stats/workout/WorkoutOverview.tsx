@@ -1,43 +1,51 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { RotateCcw as RetryIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import { useStats } from '@/contexts/StatsContext';
 import { useRunStats } from '@/hooks/useRuns';
 import { useWeightTrainingStats } from '@/hooks/useWeightTrainings';
 import { formatMinutesToHours } from '@/lib/dateUtils';
 
 export default function WorkoutOverview() {
-  const queryClient = useQueryClient();
+  const { dateRange } = useStats();
 
   const {
     data: runStats,
     isLoading: isLoadingRunStats,
     error: runStatsError,
-  } = useRunStats();
+  } = useRunStats(dateRange!);
 
   const {
     data: weightTrainingStats,
     isLoading: isLoadingWeightTrainingStats,
     error: weightTrainingStatsError,
-  } = useWeightTrainingStats();
+  } = useWeightTrainingStats(dateRange!);
 
-  if (!runStats || !weightTrainingStats) return null;
+  const queryClient = useQueryClient();
 
-  const workoutStats = {
-    total_workouts:
-      parseInt(runStats.total_runs) +
-      parseInt(weightTrainingStats.total_workouts),
-    total_time:
-      parseInt(runStats.total_time) + parseInt(weightTrainingStats.total_time),
-    avg_duration:
-      (parseInt(runStats.total_time) +
-        parseInt(weightTrainingStats.total_time)) /
-      (parseInt(runStats.total_runs) +
-        parseInt(weightTrainingStats.total_workouts)),
-  };
+  const workoutStats = useMemo(() => {
+    if (!runStats || !weightTrainingStats || !dateRange?.from || !dateRange?.to)
+      return;
+
+    return {
+      total_workouts:
+        parseInt(runStats.total_runs) +
+        parseInt(weightTrainingStats.total_workouts),
+      total_time:
+        parseInt(runStats.total_time) +
+        parseInt(weightTrainingStats.total_time),
+      avg_duration:
+        (parseInt(runStats.total_time) +
+          parseInt(weightTrainingStats.total_time)) /
+        (parseInt(runStats.total_runs) +
+          parseInt(weightTrainingStats.total_workouts)),
+    };
+  }, [runStats, weightTrainingStats, dateRange]);
 
   return (
     <Card className="w-full min-h-30 sm:min-h-20 max-h-fit py-4 sm:py-5">

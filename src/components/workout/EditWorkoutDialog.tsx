@@ -41,7 +41,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
   );
   const [duration, setDuration] = useState(workout.duration_minutes);
   const [notes, setNotes] = useState(workout.notes || '');
-  const [createdAt, setCreatedAt] = useState(workout.created_at);
+  const [createdAt, setCreatedAt] = useState(new Date(workout.created_at));
 
   const updateRun = useUpdateRun();
   const updateWeightTraining = useUpdateWeightTraining();

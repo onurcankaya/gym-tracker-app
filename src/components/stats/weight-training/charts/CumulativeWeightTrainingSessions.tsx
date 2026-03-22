@@ -8,11 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { LineChartComponent as LineChart } from '@/components/charts/LineChart';
+import { useStats } from '@/contexts/StatsContext';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
-import { sortByWorkoutDate } from '@/lib/workoutUtils';
+import {
+  sortByWorkoutDate,
+  filterWorkoutsByDateRange,
+} from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
 
 export default function CumulativeWeightTrainingSessions() {
+  const { dateRange } = useStats();
   const { data: weightTrainings, isLoading, error } = useWeightTrainings();
 
   const queryClient = useQueryClient();
@@ -21,11 +26,15 @@ export default function CumulativeWeightTrainingSessions() {
     if (!weightTrainings) return;
 
     const weightTrainingsAsc = sortByWorkoutDate(weightTrainings, 'asc');
+    const weightTrainingsWithinDateRange = filterWorkoutsByDateRange(
+      weightTrainingsAsc,
+      dateRange,
+    );
 
     let gymSessionCount = 0;
     const cumulativeWeightTrainingSessionData = [];
 
-    for (let weightTraining of weightTrainingsAsc) {
+    for (let weightTraining of weightTrainingsWithinDateRange) {
       gymSessionCount++;
       cumulativeWeightTrainingSessionData.push({
         date: format(new Date(weightTraining.created_at), 'MMM d'),
@@ -34,7 +43,7 @@ export default function CumulativeWeightTrainingSessions() {
     }
 
     return cumulativeWeightTrainingSessionData;
-  }, [weightTrainings]);
+  }, [weightTrainings, dateRange]);
 
   return (
     <Card className="w-full min-h-80 py-4 sm:py-5">

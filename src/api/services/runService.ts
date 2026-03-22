@@ -1,5 +1,6 @@
 import { RunModel } from '@/api/models/runModel';
 import { Run, CreateRunDTO, UpdateRunDTO, RunStats } from '@/api/types/run';
+import { DateRange } from '@/api/types/dateRange';
 
 export class RunService {
   static async getAllRuns(userId: string): Promise<Run[]> {
@@ -37,7 +38,10 @@ export class RunService {
     return RunModel.update(userId, runId, data);
   }
 
-  static async getStats(userId: string): Promise<RunStats> {
-    return RunModel.getStats(userId);
+  static async getStats(
+    userId: string,
+    dateRange: DateRange,
+  ): Promise<RunStats> {
+    return RunModel.getStats(userId, dateRange);
   }
 }
