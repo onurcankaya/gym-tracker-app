@@ -17,11 +17,8 @@ import WorkoutFilters from '@/components/workout/WorkoutFilters';
 import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';
 import { useWeightTrainings } from '@/hooks/useWeightTrainings';
-import { formatFullDate } from '@/lib/dateUtils';
-import {
-  sortByWorkoutDate,
-  filterWorkoutsByDateRange,
-} from '@/lib/workoutUtils';
+import { formatFullDate, isDateInRange } from '@/lib/dateUtils';
+import { sortByWorkoutDate } from '@/lib/workoutUtils';
 import { WorkoutType, Workout } from '@/api/types';
 
 export default function WorkoutHistory() {
@@ -47,42 +44,53 @@ export default function WorkoutHistory() {
       })) || []),
     ] as Workout[];
 
-    if (dateRange && dateRange.from && dateRange.to) {
-      return filterWorkoutsByDateRange(items);
-    }
+    const itemsDesc = sortByWorkoutDate(items, 'desc');
+
+    return itemsDesc;
+  }, [runs, weightTrainings]);
+
+  const filteredWorkouts = useMemo(() => {
+    if (!allWorkouts) return [];
+
+    let filteredData = allWorkouts;
 
     if (
       activeTab === WorkoutType.RUN ||
       activeTab === WorkoutType.WEIGHT_TRAINING
     ) {
-      return sortByWorkoutDate(
-        items.filter((item) => item.type === activeTab),
-        'desc',
+      filteredData = filteredData.filter(
+        (workout) => workout.type === activeTab,
       );
     }
 
-    return sortByWorkoutDate(items, 'desc');
-  }, [activeTab, dateRange, runs, weightTrainings]);
-
-  const filteredWorkouts = useMemo(() => {
-    if (!allWorkouts) return [];
-    if (!searchQuery) return allWorkouts;
-
-    return allWorkouts.filter((workout) => {
-      const search = searchQuery.toLowerCase();
-      const type = workout.type?.toLowerCase();
-      const notes = workout.notes?.toLowerCase() || '';
-
-      return (
-        type?.includes(search) ||
-        notes.includes(search) ||
-        (workout.type === WorkoutType.WEIGHT_TRAINING &&
-          workout.muscle_groups?.some((muscleGroup) =>
-            muscleGroup.includes(search),
-          ))
+    if (dateRange && dateRange?.from && dateRange?.to) {
+      filteredData = filteredData.filter((workout) =>
+        isDateInRange(workout.created_at, {
+          from: dateRange.from,
+          to: dateRange.to,
+        }),
       );
-    });
-  }, [searchQuery, allWorkouts]);
+    }
+
+    if (searchQuery.length) {
+      filteredData = filteredData.filter((workout) => {
+        const type = workout.type?.toLowerCase();
+        const notes = workout.notes?.toLowerCase() || '';
+        const search = searchQuery.toLowerCase();
+
+        return (
+          type?.includes(search) ||
+          notes.includes(search) ||
+          (workout.type === WorkoutType.WEIGHT_TRAINING &&
+            workout.muscle_groups?.some((muscleGroup) =>
+              muscleGroup.includes(search),
+            ))
+        );
+      });
+    }
+
+    return filteredData;
+  }, [activeTab, searchQuery, dateRange, allWorkouts]);
 
   const hasActiveFilters = useMemo(() => {
     return !!dateRange?.from || !!dateRange?.to;

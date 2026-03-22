@@ -22,6 +22,13 @@ export function formatMinutesToHours(minutes: number | string) {
   return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
 }
 
+export function isDateInRange(date: string, range: { from?: Date; to?: Date }) {
+  if (!range.from || !range.to) return true;
+  const fromStr = format(range.from, DATE_FORMAT.DATE_STRING);
+  const toStr = format(range.to, DATE_FORMAT.DATE_STRING);
+  return date >= fromStr && date <= toStr;
+}
+
 const today = new Date();
 
 const sevenDaysAgo = new Date(today);
