@@ -1,6 +1,5 @@
-import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { DATE_FORMAT } from '@/lib/dateUtils';
+import { isDateInRange } from '@/lib/dateUtils';
 import { Workout } from '@/api/types';
 
 export function sortByWorkoutDate(data: Workout[], sortOrder: 'asc' | 'desc') {
@@ -25,11 +24,6 @@ export function filterWorkoutsByDateRange(
 ) {
   return data.filter((item) => {
     if (!dateRange?.from || !dateRange?.to) return true;
-
-    const workoutDate = format(item.created_at, DATE_FORMAT.DATE_STRING);
-    const fromDate = format(dateRange?.from!, DATE_FORMAT.DATE_STRING);
-    const toDate = format(dateRange?.to!, DATE_FORMAT.DATE_STRING);
-
-    return workoutDate >= fromDate && workoutDate <= toDate;
+    isDateInRange(item.created_at, dateRange);
   });
 }
