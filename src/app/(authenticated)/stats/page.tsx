@@ -13,8 +13,8 @@ function StatsPageContent() {
   const { title, tab, setTab, dateRange, dateRangeLabel } = useStats();
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 pt-[80px]">
-      <div className="min-w-90 max-w-sm sm:min-w-lg">
+    <div className="flex min-h-screen items-center justify-center p-4 py-16 md:py-24">
+      <div className="min-w-90 max-w-sm sm:min-w-2xl">
         <Card className="px-2 py-4 sm:py-5">
           <Tabs
             value={tab}
