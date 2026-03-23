@@ -14,7 +14,7 @@ import { AxisDomain } from 'recharts/types/util/types';
 import { capitalize } from 'lodash';
 
 type LineChartComponentProps = {
-  chartData: Record<string, string | number>[];
+  chartData: Record<string, string | number>[] | undefined;
   lineData: { key: string; color?: string }[];
   xAxisDataKey: string;
   yAxisUnit?: string;
@@ -34,7 +34,7 @@ export function LineChartComponent({
 }: LineChartComponentProps) {
   return (
     <>
-      {chartData.length ? (
+      {chartData?.length ? (
         <ResponsiveContainer width="100%" height={height}>
           <LineChart
             data={chartData}
