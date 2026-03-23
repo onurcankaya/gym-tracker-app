@@ -1,6 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction } from 'react';
+import { isAfter, startOfToday } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
@@ -30,6 +31,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
           mode="single"
           selected={new Date(date)}
           onSelect={(newDate) => newDate && setDate(newDate)}
+          disabled={(date) => isAfter(date, startOfToday())}
         />
       </PopoverContent>
     </Popover>

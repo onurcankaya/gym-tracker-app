@@ -24,6 +24,6 @@ export function filterWorkoutsByDateRange(
 ) {
   return data.filter((item) => {
     if (!dateRange?.from || !dateRange?.to) return true;
-    isDateInRange(item.created_at, dateRange);
+    return isDateInRange(item.created_at, dateRange);
   });
 }

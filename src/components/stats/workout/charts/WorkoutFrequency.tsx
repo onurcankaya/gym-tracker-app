@@ -100,6 +100,13 @@ export default function WorkoutFrequency() {
             <BarChart
               chartData={chartData}
               xAxisDataKey="date"
+              xAxisRange={
+                chartData?.length
+                  ? chartData.length > 1
+                    ? [chartData[0].date, chartData[chartData.length - 1].date]
+                    : [chartData?.[0].date]
+                  : undefined
+              }
               barColors={{
                 run: workoutColors['run'],
                 'weight training': workoutColors['weight training'],
