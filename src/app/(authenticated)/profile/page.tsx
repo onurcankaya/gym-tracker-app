@@ -8,6 +8,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PageWrapper from '@/components/common/PageWrapper';
 import { useGetUser, useUpdateUser } from '@/hooks/useUser';
 
 export default function ProfilePage() {
@@ -48,10 +49,10 @@ export default function ProfilePage() {
   if (!session) return null;
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <PageWrapper title="Profile">
+      <Card className="w-full pt-4 pb-6">
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
+          <CardTitle className="text-sm md:text-base">User details</CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -136,6 +137,6 @@ export default function ProfilePage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </PageWrapper>
   );
 }

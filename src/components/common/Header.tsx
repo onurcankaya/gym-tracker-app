@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Triangle, Loader, ChevronDown } from 'lucide-react';
+import { Loader, ChevronDown } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -13,7 +13,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { useGetUser } from '@/hooks/useUser';
 
-export default function Header() {
+export default function Header({ title }: { title: string }) {
   const [open, setOpen] = useState(false);
 
   const { data: session, status } = useSession();
@@ -22,12 +22,12 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <div className="absolute mx-auto sm:max-w-full max-w-3xl top-0 right-4 left-4 py-4 px-0 md:px-2 z-999 flex items-center justify-between">
-      <div className="w-8 h-8 flex items-center justify-center">
-        <Button variant="ghost" onClick={() => router.push('/')}>
-          <Triangle className="text-neon-green-300" />
-        </Button>
-      </div>
+    <header className="w-full flex items-center justify-between py-4">
+      <Button variant="ghost" onClick={() => router.push('/')}>
+        <img src="/pulse-logo.png" alt="pulse app logo" className="w-6 h-6" />
+      </Button>
+
+      <h1 className="text-sm sm:text-base font-semibold">{title}</h1>
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="flex items-center">
@@ -81,6 +81,6 @@ export default function Header() {
           </Button>
         </PopoverContent>
       </Popover>
-    </div>
+    </header>
   );
 }

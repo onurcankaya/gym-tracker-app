@@ -232,6 +232,11 @@
     border-radius: var(--radius-md);
     background-color: var(--muted);
     padding: 0.25rem;
+    button {
+      @media (max-width: 640px) {
+        font-size: 14px !important;
+      }
+    }
   }
 
   [data-slot='tabs-trigger'][data-state='active'] {

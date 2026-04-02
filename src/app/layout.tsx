@@ -16,8 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Gym Tracker App',
-  description: 'Track your workouts and runs',
+  title: 'Pulse',
+  description: 'Track your workouts',
+  icons: {
+    apple: '/apple-touch-icon.png',
+  },
   viewport: {
     width: 'device-width',
     initialScale: 1,
