@@ -17,10 +17,10 @@ export function useCreateWeightTraining() {
     mutationFn: weightTrainingClient.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
-      toast.success('Workout created');
+      toast.success('Weight training created');
     },
     onError: () => {
-      toast.error('Failed to create workout');
+      toast.error('Failed to create weight training');
     },
   });
 }
@@ -32,10 +32,10 @@ export function useDeleteWeightTraining() {
     mutationFn: weightTrainingClient.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
-      toast.success('Workout deleted');
+      toast.success('Weight training deleted');
     },
     onError: () => {
-      toast.error('Failed to delete workout');
+      toast.error('Failed to delete weight training');
     },
   });
 }
@@ -47,10 +47,10 @@ export function useUpdateWeightTraining() {
     mutationFn: weightTrainingClient.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['weightTrainings'] });
-      toast.success('Workout updated');
+      toast.success('Weight training updated');
     },
     onError: () => {
-      toast.error('Failed to update workout');
+      toast.error('Failed to update weight training');
     },
   });
 }

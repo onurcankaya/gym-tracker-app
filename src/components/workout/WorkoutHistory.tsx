@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { InputWithSlots } from '@/components/common/InputWithSlots';
+import LogWorkoutDialog from '@/components/workout/LogWorkoutDialog';
 import WorkoutFilters from '@/components/workout/WorkoutFilters';
 import WorkoutCard from '@/components/workout/WorkoutCard';
 import { useRuns } from '@/hooks/useRuns';
@@ -92,6 +93,12 @@ export default function WorkoutHistory() {
     return filteredData;
   }, [activeTab, searchQuery, dateRange, allWorkouts]);
 
+  const title = useMemo(() => {
+    if (activeTab === WorkoutType.RUN) return 'Runs';
+    if (activeTab === WorkoutType.WEIGHT_TRAINING) return 'Weight training';
+    else return 'All workouts';
+  }, [activeTab]);
+
   const hasActiveFilters = useMemo(() => {
     return !!dateRange?.from || !!dateRange?.to;
   }, [dateRange]);
@@ -115,15 +122,16 @@ export default function WorkoutHistory() {
   }, [errorRuns, errorWeightTrainings]);
 
   return (
-    <Card>
+    <Card className="w-full py-4">
       <Tabs
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as WorkoutType)}
         className="block"
       >
-        <CardHeader className="px-4 sm:px-6">
-          <div className="flex flex-col justify-between sm:flex-row">
-            <CardTitle>Recent Workouts</CardTitle>
+        <CardHeader className="px-5 md:px-6">
+          <div className="flex justify-between">
+            <CardTitle className="text-sm md:text-base">{title}</CardTitle>
+            <LogWorkoutDialog />
           </div>
         </CardHeader>
 

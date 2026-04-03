@@ -119,12 +119,10 @@ export default function WorkoutForm() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="flex justify-end mt-4 md:mt-0">
-          <Button variant="primary" size="sm">
-            <Plus />
-            Log workout
-          </Button>
-        </div>
+        <Button variant="primary" className="w-32 h-7 rounded-sm">
+          <Plus />
+          <p className="text-sm">Log workout</p>
+        </Button>
       </DialogTrigger>
 
       <DialogContent>

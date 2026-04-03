@@ -17,10 +17,10 @@ export function useCreateRun() {
     mutationFn: runClient.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['runs'] });
-      toast.success('Workout created');
+      toast.success('Run created');
     },
     onError: () => {
-      toast.error('Failed to create workout');
+      toast.error('Failed to create run');
     },
   });
 }
@@ -32,10 +32,10 @@ export function useDeleteRun() {
     mutationFn: runClient.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['runs'] });
-      toast.success('Workout deleted');
+      toast.success('Run deleted');
     },
     onError: () => {
-      toast.error('Failed to delete workout');
+      toast.error('Failed to delete run');
     },
   });
 }
@@ -47,10 +47,10 @@ export function useUpdateRun() {
     mutationFn: runClient.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['runs'] });
-      toast.success('Workout updated');
+      toast.success('Run updated');
     },
     onError: () => {
-      toast.error('Failed to update workout');
+      toast.error('Failed to update run');
     },
   });
 }
