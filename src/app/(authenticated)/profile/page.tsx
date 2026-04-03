@@ -52,7 +52,7 @@ export default function ProfilePage() {
     <PageWrapper title="Profile">
       <Card className="w-full pt-4 pb-6">
         <CardHeader>
-          <CardTitle className="text-sm md:text-base">User details</CardTitle>
+          <CardTitle>User details</CardTitle>
         </CardHeader>
 
         <CardContent>

@@ -130,7 +130,7 @@ export default function WorkoutHistory() {
       >
         <CardHeader className="px-5 md:px-6">
           <div className="flex justify-between">
-            <CardTitle className="text-sm md:text-base">{title}</CardTitle>
+            <CardTitle>{title}</CardTitle>
             <LogWorkoutDialog />
           </div>
         </CardHeader>
