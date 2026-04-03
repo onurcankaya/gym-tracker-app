@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Pulse',
   description: 'Track your workouts',
+  manifest: '/manifest.json',
   icons: {
     apple: '/apple-touch-icon.png',
   },

@@ -27,7 +27,7 @@ export default function Header({ title }: { title: string }) {
         <img src="/pulse-logo.png" alt="pulse app logo" className="w-6 h-6" />
       </Button>
 
-      <h1 className="text-sm sm:text-base font-semibold">{title}</h1>
+      <h1 className="font-semibold">{title}</h1>
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="flex items-center">
