@@ -22,7 +22,7 @@ export default function Header({ title }: { title: string }) {
   const router = useRouter();
 
   return (
-    <header className="w-full flex items-center justify-between py-4">
+    <header className="w-full flex items-center justify-between border-b border-zinc-800 p-4">
       <Button variant="ghost" onClick={() => router.push('/')}>
         <img src="/pulse-logo.png" alt="pulse app logo" className="w-6 h-6" />
       </Button>
@@ -31,7 +31,7 @@ export default function Header({ title }: { title: string }) {
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="flex items-center">
-          <span className="flex items-center gap-2 border rounded-md px-3 py-1.5 text-xs sm:text-sm">
+          <span className="flex items-center gap-2 border rounded-md px-3 py-1.5 text-sm">
             {status === 'loading' ? (
               <Spinner icon={Loader} />
             ) : (
@@ -50,7 +50,7 @@ export default function Header({ title }: { title: string }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs sm:text-sm"
+            className="w-full"
             onClick={() => router.push('/')}
           >
             Workouts
@@ -58,7 +58,7 @@ export default function Header({ title }: { title: string }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs sm:text-sm"
+            className="w-full"
             onClick={() => router.push('/stats')}
           >
             Stats
@@ -66,7 +66,7 @@ export default function Header({ title }: { title: string }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs sm:text-sm"
+            className="w-full"
             onClick={() => router.push('/profile')}
           >
             Profile
@@ -74,7 +74,7 @@ export default function Header({ title }: { title: string }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs sm:text-sm"
+            className="w-full"
             onClick={() => signOut()}
           >
             Sign out
