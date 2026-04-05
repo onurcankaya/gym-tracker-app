@@ -39,6 +39,7 @@ export default function RootLayout({
     <html lang="en" className="darker">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <AuthSessionProvider>
           <ReactQueryProvider>
