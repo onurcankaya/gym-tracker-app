@@ -13,7 +13,7 @@ type WorkoutCardProps = {
 export default function WorkoutCard({ workout }: WorkoutCardProps) {
   return (
     <div className="border rounded-md p-4 hover:border-neon-green-300 transition-colors">
-      <div className="flex justify-between items-start gap-2">
+      <div className="flex justify-between items-start">
         <div>
           <p className="text-xs text-gray-400 mb-3">
             {new Date(workout.created_at).toLocaleDateString('en-DK')}
@@ -53,12 +53,14 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
 
           <span>
             {workout.notes && (
-              <p className="text-xs text-gray-500 mt-4">{workout.notes}</p>
+              <p className="text-xs text-gray-500 mt-4 whitespace-pre-line ">
+                {workout.notes}
+              </p>
             )}
           </span>
         </div>
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5">
           <EditWorkoutDialog workout={workout} />
           <DeleteWorkoutDialog workout={workout} />
         </div>
