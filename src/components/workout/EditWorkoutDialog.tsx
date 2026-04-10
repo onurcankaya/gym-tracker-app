@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog';
@@ -55,7 +56,7 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
           id: workout.id,
           data: {
             distance:
-              typeof distance === 'string' ? parseInt(distance) : distance,
+              typeof distance === 'string' ? parseFloat(distance) : distance,
             distance_unit: distanceUnit,
             duration_minutes: duration,
             notes,
@@ -123,12 +124,14 @@ export default function EditWorkoutDialog({ workout }: EditWorkoutDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit {workout.type}</DialogTitle>
+          <DialogDescription>Save changes to update workout</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 my-4">
           {workout.type === WorkoutType.RUN && (
             <InputWithToggle
               type="number"
+              step="0.1"
               placeholder="Distance"
               value={distance}
               onChange={setDistance}
