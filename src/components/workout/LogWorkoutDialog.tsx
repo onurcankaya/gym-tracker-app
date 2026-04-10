@@ -46,7 +46,7 @@ export default function WorkoutForm() {
       createRun.mutate(
         {
           distance:
-            typeof distance === 'string' ? parseInt(distance) : distance,
+            typeof distance === 'string' ? parseFloat(distance) : distance,
           distance_unit: distanceUnit,
           duration_minutes:
             typeof duration === 'string' ? parseInt(duration) : duration,
@@ -145,6 +145,7 @@ export default function WorkoutForm() {
             <TabsContent value={WorkoutType.RUN} className="mt-4 space-y-4">
               <InputWithToggle
                 type="number"
+                step="0.5"
                 placeholder="Distance"
                 value={distance}
                 onChange={setDistance}

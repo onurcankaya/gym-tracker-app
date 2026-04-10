@@ -13,6 +13,7 @@ type InputWithToggleProps = {
   placeholder?: string;
   className?: string;
   type?: string;
+  step?: string;
 };
 
 export function InputWithToggle({
@@ -24,11 +25,13 @@ export function InputWithToggle({
   placeholder,
   className,
   type = 'text',
+  step,
 }: InputWithToggleProps) {
   return (
     <div className="relative">
       <Input
         type={type}
+        step={step}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}

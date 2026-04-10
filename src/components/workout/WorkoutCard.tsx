@@ -12,30 +12,28 @@ type WorkoutCardProps = {
 
 export default function WorkoutCard({ workout }: WorkoutCardProps) {
   return (
-    <div className="border rounded-md p-4 hover:border-neon-green-300 transition-colors">
+    <div className="border rounded-lg p-4 hover:border-neon-green-300 transition-colors">
       <div className="flex justify-between items-start">
-        <div>
-          <p className="text-xs text-gray-400 mb-3">
+        <div className="space-y-4">
+          <p className="text-xs text-gray-400">
             {new Date(workout.created_at).toLocaleDateString('en-DK')}
           </p>
 
           <Badge
             variant="outline"
-            className="w-fit block border border-neon-green-300 mb-3"
+            className="w-fit block border border-neon-green-300"
           >
             <p className="text-sm text-center">{capitalize(workout.type)}</p>
           </Badge>
 
           {workout.type === WorkoutType.RUN && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <span className="text-sm">
                 {workout.distance}
                 {workout.distance_unit}
               </span>
-
               <span className="text-sm">•</span>
-
-              <span className="text-xs">{`${workout.duration_minutes} min`}</span>
+              <span className="text-sm">{`${workout.duration_minutes} min`}</span>
             </div>
           )}
 
