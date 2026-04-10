@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -128,9 +129,12 @@ export default function WorkoutForm() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Log {workoutType}</DialogTitle>
+          <DialogDescription>
+            Add details below to save your workout
+          </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           <Tabs
             value={workoutType}
             onValueChange={(value) => setWorkoutType(value as WorkoutType)}
