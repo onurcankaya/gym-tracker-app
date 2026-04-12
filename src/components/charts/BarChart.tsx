@@ -18,10 +18,12 @@ type BarChartProps = {
   xAxisDataKey: string;
   xAxisRange?: AxisTick[];
   yAxisRange?: AxisDomain;
+  yAxisUnit?: string;
   barColors: Record<string, string>;
   barSize?: number;
   isStacked?: boolean;
   showLegend?: boolean;
+  showLabel?: boolean;
   height?: number;
 };
 
@@ -32,8 +34,10 @@ export function BarChartComponent({
   barSize = 60,
   xAxisRange,
   yAxisRange = [0, 'auto'],
+  yAxisUnit = '',
   isStacked = false,
   showLegend = false,
+  showLabel = false,
   height = 240,
 }: BarChartProps) {
   const barData = Array.from(
@@ -89,7 +93,10 @@ export function BarChartComponent({
               itemStyle={{
                 fontSize: '12px',
               }}
-              formatter={(value, name) => [value, capitalize(name as string)]}
+              formatter={(value, name) => [
+                `${value}${yAxisUnit}`,
+                capitalize(name as string),
+              ]}
             />
             {showLegend && (
               <Legend
@@ -104,7 +111,7 @@ export function BarChartComponent({
                   marginLeft: '2px',
                   marginRight: '4px',
                 }}
-                formatter={(value) => capitalize(value)}
+                formatter={(value) => `${capitalize(value)}${yAxisUnit}`}
               />
             )}
             {barData.map((barKey) => {
@@ -117,11 +124,13 @@ export function BarChartComponent({
                   barSize={barSize}
                   radius={!isStacked ? 4 : 0}
                   label={
-                    isStacked && {
+                    (isStacked || showLabel) && {
                       position: 'center',
                       fill: '#000',
-                      fontSize: 12,
-                      formatter: () => capitalize(barKey),
+                      fontSize: 11,
+                      fontWeight: 500,
+                      formatter: (value) =>
+                        isStacked ? capitalize(barKey) : `${value}${yAxisUnit}`,
                     }
                   }
                 />
