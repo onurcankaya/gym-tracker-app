@@ -15,6 +15,7 @@ import {
   filterWorkoutsByDateRange,
 } from '@/lib/workoutUtils';
 import { workoutColors } from '@/lib/colors';
+import { Run } from '@/api/types/run';
 
 export default function RunFrequency() {
   const { dateRange } = useStats();
@@ -25,14 +26,17 @@ export default function RunFrequency() {
   const chartData = useMemo(() => {
     if (!runs) return;
 
-    const runsAsc = sortByWorkoutDate(runs, 'asc');
-    const runsWithinDateRange = filterWorkoutsByDateRange(runsAsc, dateRange);
+    const runsAsc = sortByWorkoutDate(runs, 'asc') as Run[];
+    const runsWithinDateRange = filterWorkoutsByDateRange(
+      runsAsc,
+      dateRange,
+    ) as Run[];
 
     return (
       runsWithinDateRange.map((run) => {
         return {
           date: format(new Date(run.created_at), 'MMM d'),
-          run: 1,
+          run: run.distance,
         };
       }) || []
     );
@@ -70,11 +74,13 @@ export default function RunFrequency() {
             <BarChart
               chartData={chartData}
               xAxisDataKey="date"
-              barSize={30}
+              yAxisUnit="km"
+              barSize={40}
               barColors={{
                 run: workoutColors['run'],
               }}
               height={180}
+              showLabel
             />
           )}
         </CardContent>

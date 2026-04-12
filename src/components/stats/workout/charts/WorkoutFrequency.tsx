@@ -59,11 +59,20 @@ export default function WorkoutFrequency() {
           weightTrainingCount++;
         }
 
-        return {
-          date: format(new Date(workout.created_at), 'MMM d'),
-          run: runCount,
-          'weight training': weightTrainingCount,
-        };
+        const data: { date: string; run?: number; 'weight training'?: number } =
+          {
+            date: format(new Date(workout.created_at), 'MMM d'),
+          };
+
+        if (runCount > 0) {
+          data.run = runCount;
+        }
+
+        if (weightTrainingCount > 0) {
+          data['weight training'] = weightTrainingCount;
+        }
+
+        return data;
       }) || []
     );
   }, [runs, weightTrainings, dateRange]);
@@ -75,7 +84,7 @@ export default function WorkoutFrequency() {
       </CardHeader>
 
       {errorRuns || errorWeightTrainings ? (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-2">
           <p className="p-8 text-sm text-center text-red-500">
             Error loading workouts frequency chart
           </p>
@@ -93,7 +102,7 @@ export default function WorkoutFrequency() {
           </Button>
         </CardContent>
       ) : (
-        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4">
+        <CardContent className="flex flex-1 flex-col items-center justify-center px-3.5 sm:px-4 mt-2">
           {isLoadingRuns || isLoadingWeightTrainings ? (
             <Spinner className="size-12 text-neon-green-300" />
           ) : (
@@ -112,7 +121,7 @@ export default function WorkoutFrequency() {
                 'weight training': workoutColors['weight training'],
               }}
               showLegend={true}
-              height={180}
+              height={200}
             />
           )}
         </CardContent>
