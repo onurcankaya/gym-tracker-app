@@ -22,9 +22,17 @@ export default function Header({ title }: { title: string }) {
   const router = useRouter();
 
   return (
-    <header className="w-full flex items-center justify-between border-b border-zinc-800 p-4">
-      <Button variant="ghost" onClick={() => router.push('/')}>
-        <img src="/pulse-logo.png" alt="pulse app logo" className="w-6 h-6" />
+    <header className="w-full flex items-center justify-between border-b border-zinc-800 p-4 sm:px-6 sm:py-4">
+      <Button
+        variant="ghost"
+        onClick={() => router.push('/')}
+        className="px-2 py-0"
+      >
+        <img
+          src="/momentum-logo.png"
+          alt="momentum app logo"
+          className="w-8 h-8"
+        />
       </Button>
 
       <h1 className="font-semibold">{title}</h1>
