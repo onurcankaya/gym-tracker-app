@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Pulse',
+  title: 'Momentum',
   description: 'Track your workouts',
   manifest: '/manifest.json',
   icons: {
