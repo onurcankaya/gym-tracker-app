@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import Link from 'next/link';
+import GoogleAuth from '@/components/auth/GoogleAuth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -87,6 +88,8 @@ export default function LoginPage() {
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
+
+            <GoogleAuth />
 
             <p className="text-center text-sm text-gray-400">
               Don't have an account?{' '}

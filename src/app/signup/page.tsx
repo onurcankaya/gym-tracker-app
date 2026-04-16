@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { Loader } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import Link from 'next/link';
+import GoogleAuth from '@/components/auth/GoogleAuth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -129,6 +130,8 @@ export default function LoginPage() {
               {isLoading && <Spinner icon={Loader} className="text-black" />}
               {isLoading ? 'Creating account...' : 'Sign up'}
             </Button>
+
+            <GoogleAuth />
 
             <p className="text-center text-sm text-gray-400">
               Already have an account?{' '}
