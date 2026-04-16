@@ -7,7 +7,15 @@ export class UserService {
       throw new Error('Invalid user id');
     }
 
-    return UserModel.find(id);
+    return UserModel.findById(id);
+  }
+
+  static async getUserId(email: string): Promise<User['email']> {
+    if (!email) {
+      throw new Error('Invalid user email');
+    }
+
+    return UserModel.findByEmail(email);
   }
 
   static async updateUser(id: string, data: UpdateUserDTO): Promise<User> {

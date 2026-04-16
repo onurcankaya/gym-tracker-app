@@ -39,14 +39,16 @@ export default function Header({ title }: { title: string }) {
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="flex items-center">
-          <span className="flex items-center gap-2 border rounded-md px-3 py-1.5 text-sm">
+          <span className="w-20 h-[34px] flex items-center justify-center gap-2 border rounded-md px-3 py-1.5 text-sm">
             {status === 'loading' ? (
               <Spinner icon={Loader} />
             ) : (
-              <>
-                {user?.name}
-                <ChevronDown className="h-4 w-4" />
-              </>
+              user?.name && (
+                <>
+                  {user.name}
+                  <ChevronDown className="h-4 w-4" />
+                </>
+              )
             )}
           </span>
         </PopoverTrigger>
